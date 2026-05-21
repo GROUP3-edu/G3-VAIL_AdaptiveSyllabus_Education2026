@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAIL Adaptive Ecosystem 2026 · G3</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f6f5f1;--bg2:#eeece6;--surface:#ffffff;--surface2:#f5f3ef;--surface3:#e9e6de;
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.13);
+  --ink:#0f1117;--ink2:#3d4150;--ink3:#7a808f;--ink4:#b0b6c3;
+  --blue:#1a4fd6;--blue-l:#e8effe;--blue-m:rgba(26,79,214,0.12);
+  --green:#0a6e4f;--green-l:#e5f5ef;--green-m:rgba(10,110,79,0.12);
+  --red:#c23030;--red-l:#fce8e8;--red-m:rgba(194,48,48,0.12);
+  --amber:#a05c0a;--amber-l:#fef3e1;--amber-m:rgba(160,92,10,0.12);
+  --violet:#5b2aa8;--violet-l:#f0eaff;--violet-m:rgba(91,42,168,0.12);
+  --teal:#0a7a8a;--teal-l:#e5f7fa;
+  --fd:'Playfair Display',Georgia,serif;
+  --fb:'Plus Jakarta Sans',sans-serif;
+  --fm:'Fira Code',monospace;
+  --r6:6px;--r8:8px;--r12:12px;--r16:16px;--r20:20px;--r24:24px;
+  --sh-sm:0 1px 3px rgba(0,0,0,0.07),0 1px 2px rgba(0,0,0,0.04);
+  --sh:0 4px 20px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.04);
+  --sh-lg:0 12px 48px rgba(0,0,0,0.1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:14px;line-height:1.6;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;height:58px;
+  background:rgba(246,245,241,0.96);backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;padding:0 24px;
+  box-shadow:var(--sh-sm)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(145deg,#1a4fd6 0%,#0a6e4f 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--fb);font-weight:800;font-size:12px;color:#fff;letter-spacing:-0.5px}
+.brand-text{line-height:1.2}
+.brand-name{font-weight:700;font-size:13px;color:var(--ink);letter-spacing:-0.2px}
+.brand-sub{font-size:10px;color:var(--ink3);letter-spacing:0.02em}
+.nav-links{display:flex;gap:1px}
+.nav-btn{padding:5px 13px;border-radius:var(--r8);font-size:12px;font-weight:600;
+  color:var(--ink3);cursor:pointer;background:none;border:none;font-family:var(--fb);
+  transition:all 0.16s;letter-spacing:0.01em}
+.nav-btn:hover{background:var(--surface2);color:var(--ink)}
+.nav-btn.active{background:var(--blue-l);color:var(--blue);font-weight:700}
+.nav-pill{background:var(--green);color:#fff;font-size:9px;font-weight:700;
+  padding:3px 10px;border-radius:20px;letter-spacing:0.07em}
+
+/* ── TICKER ── */
+.ticker{overflow:hidden;background:var(--blue);padding:5px 0}
+.ticker-track{display:flex;gap:48px;white-space:nowrap;animation:tick 50s linear infinite}
+.tick-i{font-family:var(--fm);font-size:10px;color:rgba(255,255,255,0.8)}
+.tick-i b{color:#fff;font-weight:600}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.65)}}
+@keyframes wave{0%,100%{transform:scaleY(.3);opacity:.4}50%{transform:scaleY(1);opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── LAYOUT ── */
+.section{display:none;padding:78px 0 60px;min-height:100vh}
+.section.active{display:block;animation:fadeUp .3s ease}
+.wrap{max-width:1300px;margin:0 auto;padding:0 24px}
+
+/* ── PAGE HEADER ── */
+.pg-hdr{padding:26px 0 22px;border-bottom:1px solid var(--border);margin-bottom:26px}
+.eyebrow{font-family:var(--fm);font-size:9px;color:var(--blue);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:7px}
+.pg-hdr h1{font-family:var(--fd);font-size:32px;font-weight:400;letter-spacing:-0.02em;line-height:1.15;color:var(--ink)}
+.pg-hdr p{margin-top:7px;color:var(--ink3);font-size:12.5px;max-width:700px;line-height:1.75}
+.badge-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;
+  font-size:10px;font-weight:700;letter-spacing:0.05em;border:1px solid}
+.b-green{background:var(--green-l);border-color:rgba(10,110,79,0.22);color:var(--green)}
+.b-blue{background:var(--blue-l);border-color:rgba(26,79,214,0.22);color:var(--blue)}
+.b-violet{background:var(--violet-l);border-color:rgba(91,42,168,0.22);color:var(--violet)}
+.b-amber{background:var(--amber-l);border-color:rgba(160,92,10,0.22);color:var(--amber)}
+.live-dot{width:6px;height:6px;background:currentColor;border-radius:50%;animation:pulse 1.6s infinite}
+
+/* ── STAT CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r16);
+  padding:18px 20px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;cursor:default}
+.stat-card:hover{transform:translateY(-2px);box-shadow:var(--sh)}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2.5px;border-radius:var(--r16) var(--r16) 0 0}
+.sc-b::after{background:linear-gradient(90deg,#1a4fd6,#60a5fa)}
+.sc-g::after{background:linear-gradient(90deg,#0a6e4f,#34d399)}
+.sc-r::after{background:linear-gradient(90deg,#c23030,#f87171)}
+.sc-a::after{background:linear-gradient(90deg,#a05c0a,#fbbf24)}
+.sc-v::after{background:linear-gradient(90deg,#5b2aa8,#a78bfa)}
+.s-lbl{font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:5px;font-weight:600}
+.s-val{font-family:var(--fd);font-size:28px;font-weight:400;line-height:1;letter-spacing:-0.02em}
+.sv-b{color:var(--blue)}.sv-g{color:var(--green)}.sv-r{color:var(--red)}.sv-a{color:var(--amber)}.sv-v{color:var(--violet)}
+.s-sub{font-size:10px;color:var(--ink4);margin-top:4px}
+
+/* ── GRID HELPERS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.g65{display:grid;grid-template-columns:1.8fr 1fr;gap:16px}
+
+/* ── CARD ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r16);padding:20px;margin-bottom:16px;box-shadow:var(--sh-sm)}
+.card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:13px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:7px}
+.ctag{font-family:var(--fm);font-size:9px;padding:3px 9px;border-radius:20px;border:1px solid;letter-spacing:0.08em;font-weight:600}
+.ct-b{border-color:rgba(26,79,214,0.3);color:var(--blue);background:var(--blue-l)}
+.ct-g{border-color:rgba(10,110,79,0.3);color:var(--green);background:var(--green-l)}
+.ct-r{border-color:rgba(194,48,48,0.3);color:var(--red);background:var(--red-l)}
+.ct-a{border-color:rgba(160,92,10,0.3);color:var(--amber);background:var(--amber-l)}
+.ct-v{border-color:rgba(91,42,168,0.3);color:var(--violet);background:var(--violet-l)}
+
+/* ── SECTOR TABS ── */
+.stabs{display:flex;gap:7px;margin-bottom:20px;flex-wrap:wrap}
+.stab{padding:7px 16px;border-radius:var(--r12);font-size:12px;font-weight:600;cursor:pointer;
+  border:1px solid var(--border);background:var(--surface);color:var(--ink3);
+  transition:all .16s;font-family:var(--fb);display:flex;align-items:center;gap:6px}
+.stab:hover{border-color:rgba(26,79,214,0.3);color:var(--ink)}
+.st-b{background:var(--blue-l);border-color:rgba(26,79,214,0.3);color:var(--blue)}
+.st-g{background:var(--green-l);border-color:rgba(10,110,79,0.3);color:var(--green)}
+.st-a{background:var(--amber-l);border-color:rgba(160,92,10,0.3);color:var(--amber)}
+
+/* ── HEATMAP ── */
+.hm-wrap{overflow-x:auto;padding-bottom:4px}
+.hm-table{width:100%;border-collapse:separate;border-spacing:4px;font-family:var(--fm)}
+.hm-table th{font-size:10px;color:var(--ink3);padding:6px 8px;text-align:center;font-weight:600;letter-spacing:0.05em}
+.hm-table th.hm-sk{text-align:left;font-size:11px}
+.hm-skill{font-family:var(--fb);font-size:11px;color:var(--ink2);text-align:left;padding:8px;white-space:nowrap;font-weight:600}
+.hm-cell{border-radius:7px;padding:9px 6px;text-align:center;font-size:11px;font-weight:700;
+  cursor:pointer;transition:all .15s;letter-spacing:0.02em;position:relative}
+.hm-cell:hover{transform:scale(1.12);z-index:20;box-shadow:0 4px 14px rgba(0,0,0,0.18)}
+.hc5{background:#fddcdc;color:#991b1b}.hc4{background:#fef0c7;color:#92400e}
+.hc3{background:#fff4e6;color:#a05c0a}.hc2{background:#e8effe;color:#1e40af}.hc1{background:#e7f5ef;color:#065f46}
+.hm-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.hm-leg{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ink3)}
+.hm-dot{width:11px;height:11px;border-radius:3px}
+
+/* ── BAR CHARTS ── */
+.bar-item{margin-bottom:11px}
+.bar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.bar-name{font-size:11px;font-weight:600;color:var(--ink)}
+.bar-pct{font-family:var(--fm);font-size:10px}
+.bar-track{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.16,1,.3,1)}
+
+/* ── SECTOR CARDS (overview) ── */
+.sec-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.sec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r20);
+  padding:22px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;box-shadow:var(--sh-sm)}
+.sec-card:hover{transform:translateY(-3px);box-shadow:var(--sh)}
+.sec-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2.5px;border-radius:var(--r20) var(--r20) 0 0}
+.sc-mkt::before{background:linear-gradient(90deg,#1a4fd6,#60a5fa)}
+.sc-fin::before{background:linear-gradient(90deg,#0a6e4f,#34d399)}
+.sc-log::before{background:linear-gradient(90deg,#a05c0a,#fbbf24)}
+.sec-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:10px}
+.sec-name{font-family:var(--fd);font-size:16px;font-weight:400;margin-bottom:4px;letter-spacing:-0.01em}
+.sec-desc{font-size:11px;color:var(--ink3);margin-bottom:13px;line-height:1.6}
+.sec-stats{display:flex;gap:16px}
+.ss-item .ssv{font-family:var(--fd);font-size:18px;font-weight:400;line-height:1}
+.ss-item .ssl{font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.07em}
+
+/* ── PIPELINE ── */
+.pipe-row{display:flex;align-items:center;overflow-x:auto;padding:12px 0;gap:4px}
+.pipe-step{display:flex;flex-direction:column;align-items:center;min-width:105px;flex:1}
+.pipe-node{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:18px;margin-bottom:7px;border:1px solid rgba(0,0,0,0.08)}
+.pipe-lbl{font-family:var(--fb);font-size:10px;font-weight:700;text-align:center;margin-bottom:1px;color:var(--ink)}
+.pipe-sub{font-size:9px;color:var(--ink3);text-align:center;max-width:100px;line-height:1.4}
+.pipe-arrow{color:var(--ink4);font-size:14px;flex-shrink:0;padding-bottom:18px}
+
+/* ── MODULES ── */
+.mod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.mod-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r16);
+  overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--sh-sm)}
+.mod-card:hover{transform:translateY(-3px);box-shadow:var(--sh);border-color:rgba(26,79,214,0.3)}
+.mod-card.active{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,79,214,0.14)}
+.mod-thumb{height:76px;display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;overflow:hidden}
+.mod-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,0.12))}
+.mod-body{padding:13px}
+.mod-sector{font-family:var(--fm);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:3px}
+.mod-title{font-size:12px;font-weight:700;margin-bottom:4px;line-height:1.35;color:var(--ink)}
+.mod-meta{font-size:10px;color:var(--ink3)}
+.mod-status{margin-top:6px;font-size:9px;padding:2px 8px;border-radius:20px;
+  display:inline-block;font-weight:700;letter-spacing:0.05em;font-family:var(--fm);border:1px solid}
+.ms-live{background:var(--green-l);color:var(--green);border-color:rgba(10,110,79,0.25)}
+.ms-wip{background:var(--amber-l);color:var(--amber);border-color:rgba(160,92,10,0.25)}
+
+/* ── MODULE DETAIL ── */
+#mod-detail{display:none}
+#mod-detail.vis{display:block;animation:fadeUp .3s ease}
+.mod-detail-wrap{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r20);overflow:hidden;margin-top:16px;box-shadow:var(--sh)}
+.mod-det-hdr{padding:22px 26px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start}
+.mod-det-body{padding:24px 26px}
+.det-tabs{display:flex;gap:3px;margin-bottom:20px;flex-wrap:wrap}
+.det-tab{padding:6px 15px;border-radius:var(--r8);font-size:11px;font-weight:700;cursor:pointer;
+  background:none;border:1px solid transparent;color:var(--ink3);transition:all .15s;font-family:var(--fb)}
+.det-tab.active{background:var(--blue-l);border-color:rgba(26,79,214,0.3);color:var(--blue)}
+.det-tab:hover:not(.active){background:var(--surface2);color:var(--ink);border-color:var(--border)}
+.tab-pane{display:none;animation:fadeUp .2s ease}
+.tab-pane.active{display:block}
+.close-x{width:28px;height:28px;border-radius:7px;background:var(--surface2);border:1px solid var(--border);
+  color:var(--ink3);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.close-x:hover{background:var(--red-l);color:var(--red);border-color:rgba(194,48,48,0.3)}
+
+/* ── VIDEO ── */
+.vid-container{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--r12);margin-bottom:13px;background:#000;box-shadow:var(--sh)}
+.vid-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:var(--r12)}
+.vid-placeholder{background:linear-gradient(135deg,var(--bg2),var(--surface3));border:1px solid var(--border);
+  border-radius:var(--r16);height:240px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;position:relative;overflow:hidden;margin-bottom:13px}
+.play-btn{width:56px;height:56px;border-radius:50%;background:var(--blue);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;
+  transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(26,79,214,0.4);border:none}
+.play-btn:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(26,79,214,0.5)}
+
+/* ── SCAN BAR ── */
+.scan-bar{display:flex;align-items:center;gap:9px;background:var(--green-l);border:1px solid rgba(10,110,79,0.2);
+  border-radius:9px;padding:8px 13px;margin-bottom:15px;font-size:11px;color:var(--green);font-weight:600}
+.sw{width:40px;height:12px;display:flex;align-items:center;gap:2px}
+.sw span{display:inline-block;width:3px;background:var(--green);border-radius:2px;animation:wave 1s ease-in-out infinite}
+.sw span:nth-child(1){height:4px;animation-delay:0s}.sw span:nth-child(2){height:9px;animation-delay:.15s}
+.sw span:nth-child(3){height:6px;animation-delay:.3s}.sw span:nth-child(4){height:12px;animation-delay:.45s}
+.sw span:nth-child(5){height:5px;animation-delay:.6s}
+
+/* ── QUIZ ── */
+.q-card{background:var(--surface2);border-radius:var(--r12);padding:16px 18px;border:1px solid var(--border);margin-bottom:11px}
+.q-text{font-size:13.5px;font-weight:600;margin-bottom:13px;line-height:1.55;color:var(--ink)}
+.opt-btn{display:flex;align-items:flex-start;gap:9px;width:100%;padding:9px 13px;border-radius:var(--r8);
+  background:var(--surface);border:1px solid var(--border);color:var(--ink);font-family:var(--fb);
+  font-size:12px;cursor:pointer;text-align:left;margin-bottom:6px;transition:all .14s;font-weight:500}
+.opt-btn:hover:not(:disabled){background:var(--blue-l);border-color:rgba(26,79,214,0.35)}
+.opt-btn:disabled{cursor:default}
+.opt-btn.correct{background:#e7f5ef;border-color:rgba(10,110,79,0.4);color:var(--green)}
+.opt-btn.wrong{background:var(--red-l);border-color:rgba(194,48,48,0.3);color:var(--red)}
+.opt-btn.rev-correct{background:#e7f5ef;border-color:rgba(10,110,79,0.4);color:var(--green)}
+.opt-btn.selected{background:var(--blue-l);border-color:rgba(26,79,214,0.4);color:var(--blue)}
+.opt-letter{width:21px;height:21px;border-radius:5px;background:var(--surface2);font-family:var(--fm);font-size:10px;
+  font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--ink3)}
+.quiz-result{text-align:center;padding:28px 20px;background:var(--surface2);border-radius:var(--r16)}
+.q-score{font-family:var(--fd);font-size:52px;font-weight:400;color:var(--blue);letter-spacing:-0.03em}
+
+/* ── BUTTONS ── */
+.btn{padding:8px 17px;border-radius:var(--r8);font-family:var(--fb);font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .16s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#1440b8;transform:translateY(-1px);box-shadow:0 4px 14px rgba(26,79,214,0.3)}
+.btn-secondary{background:var(--surface2);border:1px solid var(--border);color:var(--ink3)}
+.btn-secondary:hover{background:var(--surface3);color:var(--ink)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:#085a40;transform:translateY(-1px);box-shadow:0 4px 14px rgba(10,110,79,0.3)}
+.btn-sm{padding:6px 13px;font-size:11px}
+
+/* ── LIKERT ── */
+.likert{display:flex;gap:5px}
+.lk-btn{flex:1;padding:7px 4px;border-radius:7px;text-align:center;background:var(--surface2);
+  border:1px solid var(--border);font-size:10px;color:var(--ink3);cursor:pointer;transition:all .14s;
+  font-family:var(--fb);line-height:1.3}
+.lk-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-l)}
+.lk-btn.sel{background:var(--blue-l);border-color:rgba(26,79,214,0.4);color:var(--blue);font-weight:700}
+
+/* ── PRE/POST TEST ── */
+.test-wrap{max-width:840px;margin:0 auto}
+.test-hdr{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r20);
+  padding:26px 30px;margin-bottom:22px;box-shadow:var(--sh-sm)}
+.test-meta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}
+.tmi{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3)}
+.tmi b{color:var(--ink);font-weight:600}
+.sec-label{font-family:var(--fb);font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;
+  color:var(--blue);margin:18px 0 13px;padding:8px 13px;background:var(--blue-l);
+  border-left:3px solid var(--blue);border-radius:0 var(--r8) var(--r8) 0}
+.tq{background:var(--surface);border:1px solid var(--border);border-radius:var(--r12);
+  padding:18px 20px;margin-bottom:10px;transition:all .16s;box-shadow:var(--sh-sm)}
+.tq:hover{border-color:var(--border2);box-shadow:var(--sh)}
+.tq-num{font-family:var(--fm);font-size:9px;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.tq-text{font-size:13px;font-weight:600;margin-bottom:12px;line-height:1.55;color:var(--ink)}
+.topt{display:flex;align-items:flex-start;gap:8px;padding:9px 13px;border-radius:var(--r8);
+  background:var(--surface2);border:1px solid var(--border);margin-bottom:5px;cursor:pointer;
+  font-size:12px;transition:all .14s;font-weight:500;width:100%;text-align:left;font-family:var(--fb);color:var(--ink)}
+.topt:hover:not(:disabled){border-color:rgba(26,79,214,0.35);background:var(--blue-l)}
+.topt:disabled{cursor:default}
+.topt.correct{background:#e7f5ef;border-color:rgba(10,110,79,0.4);color:var(--green)}
+.topt.wrong{background:var(--red-l);border-color:rgba(194,48,48,0.3);color:var(--red)}
+.topt.rev-correct{background:#e7f5ef;border-color:rgba(10,110,79,0.4);color:var(--green)}
+.topt.selected{background:var(--blue-l);border-color:rgba(26,79,214,0.4);color:var(--blue)}
+.opt-key{width:21px;height:21px;border-radius:5px;background:var(--surface3);flex-shrink:0;
+  font-family:var(--fm);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;color:var(--ink3)}
+.ans-explanation{font-size:10.5px;margin-top:7px;padding:6px 10px;border-radius:6px;line-height:1.6}
+.ans-correct{background:var(--green-l);color:var(--green)}
+.ans-wrong{background:var(--red-l);color:var(--red)}
+
+/* PROGRESS BAR */
+.tprog{background:var(--surface2);border-radius:var(--r12);padding:10px 14px;margin-bottom:14px;border:1px solid var(--border)}
+.prog-track{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-top:5px}
+.prog-fill{height:100%;background:var(--blue);border-radius:3px;transition:width .4s}
+
+/* SHOW ANSWERS BTN */
+.show-ans-btn{width:100%;padding:11px;border-radius:var(--r12);background:var(--blue);color:#fff;border:none;
+  font-family:var(--fb);font-size:13px;font-weight:700;cursor:pointer;transition:all .16s;margin-top:14px}
+.show-ans-btn:hover{background:#1440b8;transform:translateY(-1px);box-shadow:0 4px 14px rgba(26,79,214,0.3)}
+.show-ans-btn:disabled{background:var(--ink4);cursor:not-allowed;transform:none;box-shadow:none}
+
+/* SCORE DISPLAY */
+.score-display{background:linear-gradient(135deg,var(--blue),#1440b8);border-radius:var(--r16);padding:24px;text-align:center;margin-top:18px}
+.score-big{font-family:var(--fd);font-size:52px;font-weight:400;color:#fff;letter-spacing:-0.03em}
+
+/* TEST EXERCISES */
+.test-ex{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r16);padding:20px 24px;margin-bottom:12px;box-shadow:var(--sh-sm)}
+.ex-title{font-family:var(--fd);font-size:15px;font-weight:400;margin-bottom:3px}
+.ex-pts{display:inline-block;font-family:var(--fm);font-size:10px;color:var(--amber);background:var(--amber-l);border:1px solid rgba(160,92,10,0.2);padding:2px 8px;border-radius:20px;margin-bottom:9px}
+.ex-prompt{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r12);padding:12px 14px;font-family:var(--fm);font-size:11px;color:var(--amber);line-height:1.7;margin-bottom:10px}
+.rubric-table{width:100%;border-collapse:collapse}
+.rubric-table th{text-align:left;padding:7px 11px;font-size:10px;color:var(--ink3);border-bottom:1px solid var(--border);font-weight:700;text-transform:uppercase;letter-spacing:0.06em}
+.rubric-table td{padding:7px 11px;font-size:11px;border-bottom:1px solid var(--border);color:var(--ink)}
+.rubric-table td:last-child{text-align:center;font-family:var(--fm);color:var(--amber);font-weight:700}
+
+/* ── RESULTS TABLE ── */
+.cohort-tabs{display:flex;gap:5px}
+.coh-tab{padding:4px 13px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;
+  border:1px solid var(--border);background:none;color:var(--ink3);transition:all .16s;font-family:var(--fb)}
+.coh-tab.active{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* ── STUDENT TABLE ── */
+.stu-table{width:100%;border-collapse:collapse;font-size:12px}
+.stu-table th{text-align:left;padding:8px 12px;border-bottom:2px solid var(--border2);font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink3)}
+.stu-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--ink);vertical-align:middle}
+.stu-table tr:hover td{background:var(--surface2)}
+.stu-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.gain-pill{display:inline-block;padding:2px 8px;border-radius:20px;font-family:var(--fm);font-size:10px;font-weight:700;background:var(--green-l);color:var(--green);border:1px solid rgba(10,110,79,0.2)}
+.mini-bar-wrap{width:120px}
+.mini-bar{height:4px;background:var(--surface3);border-radius:2px;overflow:hidden;margin-top:2px}
+.mini-pre{height:100%;background:var(--red);border-radius:2px}
+.mini-post{height:100%;background:var(--green);border-radius:2px}
+
+/* ── COMP TABLE ── */
+.comp-table{width:100%;border-collapse:collapse}
+.comp-table th{text-align:left;padding:9px 13px;border-bottom:2px solid var(--border);font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--ink3)}
+.comp-table td{padding:9px 13px;font-size:12px;border-bottom:1px solid var(--border);line-height:1.5}
+
+/* ── CODE BLOCK ── */
+.code-block{background:var(--ink);border-radius:var(--r12);padding:16px 18px;font-family:var(--fm);font-size:11px;line-height:2;color:#a5f3fc}
+
+/* ── KNOWLEDGE GRID ── */
+.kn-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
+.kn-card{background:var(--surface2);border-radius:9px;padding:12px;border-left:3px solid var(--blue)}
+.kn-num{font-family:var(--fd);font-size:16px;font-weight:400;color:var(--blue);line-height:1}
+.kn-title{font-weight:700;font-size:12px;margin:3px 0 2px;color:var(--ink)}
+.kn-desc{font-size:10px;color:var(--ink3);line-height:1.55}
+
+/* ── ALERTS ── */
+.alert-item{display:flex;align-items:flex-start;gap:10px;background:var(--surface2);border-radius:9px;
+  padding:11px;border-left:3px solid;margin-bottom:7px;transition:transform .14s}
+.alert-item:hover{transform:translateX(3px)}
+.ai-crit{border-color:var(--red)}.ai-warn{border-color:var(--amber)}.ai-info{border-color:var(--blue)}
+
+/* ── TOOLTIP ── */
+.tooltip{position:fixed;background:var(--ink);border-radius:9px;padding:8px 12px;font-size:11px;
+  pointer-events:none;z-index:1000;box-shadow:var(--sh);max-width:200px;display:none;font-family:var(--fb);color:#fff}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .stats-row,.sec-cards,.g3,.g4{grid-template-columns:1fr 1fr}
+  .g2,.g65{grid-template-columns:1fr}
+  .mod-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  .stats-row,.sec-cards{grid-template-columns:1fr}
+  .mod-grid{grid-template-columns:1fr 1fr}
+}
+.divider{height:1px;background:var(--border);margin:18px 0}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="brand">
+    <div class="brand-mark">G3</div>
+    <div class="brand-text">
+      <div class="brand-name">VAIL Adaptive Ecosystem · G3</div>
+      <div class="brand-sub">Multi-Sector AI Intelligence · IEDE 2026</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showSec('overview')">Overview</button>
+    <button class="nav-btn" onclick="showSec('gap')">Skill Gap</button>
+    <button class="nav-btn" onclick="showSec('pipeline')">Pipeline</button>
+    <button class="nav-btn" onclick="showSec('modules')">Modules</button>
+    <button class="nav-btn" onclick="showSec('tests')">Assessment</button>
+    <button class="nav-btn" onclick="showSec('pilot')">Cohort Results</button>
+  </div>
+  <div class="nav-pill">3 SECTORS LIVE</div>
+</nav>
+
+<div style="padding-top:58px">
+  <div class="ticker">
+    <div class="ticker-track" id="tickerTrack"></div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section id="overview" class="section active">
+<div class="wrap">
+  <div class="pg-hdr">
+    <div class="eyebrow">IEDE 2026 · VAIL-OEH Ecosystem · Group 3</div>
+    <h1>The VAIL Adaptive Ecosystem</h1>
+    <p>Real-time AI skill gap intelligence across Marketing, Finance & Banking, and Logistics & Supply Chain. NLP cosine similarity engine scans 25,000+ job descriptions daily across 6 Vietnamese universities.</p>
+    <div class="badge-row">
+      <span class="badge b-green"><span class="live-dot"></span> SYSTEM LIVE</span>
+      <span class="badge b-blue">3 Sectors · 6 Universities</span>
+      <span class="badge b-violet">Group 3 · IEDE 2026</span>
+      <span class="badge b-amber">Pre/Post Tests Integrated</span>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card sc-b"><div class="s-lbl">JDs Scanned Daily</div><div class="s-val sv-b">25,269</div><div class="s-sub">Across 3 sectors</div></div>
+    <div class="stat-card sc-r"><div class="s-lbl">Skill Gaps Detected</div><div class="s-val sv-r">54</div><div class="s-sub">17 clusters · 3 sectors</div></div>
+    <div class="stat-card sc-a"><div class="s-lbl">Universities Tracked</div><div class="s-val sv-a">6</div><div class="s-sub">UEH TMU UEL NEU FTU HUB</div></div>
+    <div class="stat-card sc-g"><div class="s-lbl">Avg Improvement</div><div class="s-val sv-g">+49pp</div><div class="s-sub">Pre → Post across all modules</div></div>
+  </div>
+
+  <div class="sec-cards">
+    <div class="sec-card sc-mkt" onclick="showSec('gap');switchSector('marketing')">
+      <div class="sec-icon" style="background:var(--blue-l)">📣</div>
+      <div class="sec-name" style="color:var(--blue)">Marketing</div>
+      <div class="sec-desc">AI content, analytics, prompt engineering & multimedia gaps across 6 universities</div>
+      <div class="sec-stats">
+        <div class="ss-item"><div class="ssv" style="color:var(--red)">35</div><div class="ssl">Gaps</div></div>
+        <div class="ss-item"><div class="ssv" style="color:var(--amber)">0.47</div><div class="ssl">Avg Sim</div></div>
+        <div class="ss-item"><div class="ssv" style="color:var(--green)">4</div><div class="ssl">Modules</div></div>
+      </div>
+    </div>
+    <div class="sec-card sc-fin" onclick="showSec('gap');switchSector('finance')">
+      <div class="sec-icon" style="background:var(--green-l)">🏦</div>
+      <div class="sec-name" style="color:var(--green)">Finance & Banking</div>
+      <div class="sec-desc">AutoML and LLM skill deficits — lowest similarity scores across all sectors</div>
+      <div class="sec-stats">
+        <div class="ss-item"><div class="ssv" style="color:var(--red)">10</div><div class="ssl">Gaps</div></div>
+        <div class="ss-item"><div class="ssv" style="color:var(--red)">0.29</div><div class="ssl">Avg Sim</div></div>
+        <div class="ss-item"><div class="ssv" style="color:var(--green)">2</div><div class="ssl">Modules</div></div>
+      </div>
+    </div>
+    <div class="sec-card sc-log" onclick="showSec('gap');switchSector('logistics')">
+      <div class="sec-icon" style="background:var(--amber-l)">🚚</div>
+      <div class="sec-name" style="color:var(--amber)">Logistics & Supply Chain</div>
+      <div class="sec-desc">Route optimization, AI forecasting & multilingual AI communication gaps</div>
+      <div class="sec-stats">
+        <div class="ss-item"><div class="ssv" style="color:var(--red)">9</div><div class="ssl">Gaps</div></div>
+        <div class="ss-item"><div class="ssv" style="color:var(--amber)">0.47</div><div class="ssl">Avg Sim</div></div>
+        <div class="ss-item"><div class="ssv" style="color:var(--green)">2</div><div class="ssl">Modules</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g65">
+    <div class="card">
+      <div class="card-h"><div class="card-title">Cosine Similarity vs 0.60 Threshold — All Sectors</div><div class="ctag ct-r">CROSS-SECTOR</div></div>
+      <div id="ovBars"></div>
+      <div style="margin-top:18px"><canvas id="overviewChart" height="200"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-h"><div class="card-title">Critical Alerts</div><div class="ctag ct-r"><span class="live-dot" style="display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;animation:pulse 1.6s infinite;margin-right:3px"></span>LIVE</div></div>
+      <div id="ovAlerts"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="card-title">VAIL 6-Stage Adaptive Loop</div><div class="ctag ct-g">AUTOMATED</div></div>
+    <div class="pipe-row">
+      <div class="pipe-step"><div class="pipe-node" style="background:var(--blue-l)">🔍</div><div class="pipe-lbl">Scanning</div><div class="pipe-sub">25K+ JDs/day</div></div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step"><div class="pipe-node" style="background:#e0f2fe">🧮</div><div class="pipe-lbl">NLP Engine</div><div class="pipe-sub">Cosine similarity</div></div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step"><div class="pipe-node" style="background:var(--violet-l)">📊</div><div class="pipe-lbl">Gap Detection</div><div class="pipe-sub">54 gaps · 17 clusters</div></div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step"><div class="pipe-node" style="background:var(--green-l)">⚡</div><div class="pipe-lbl">Auto-Deploy</div><div class="pipe-sub">Triggered if sim&lt;0.60</div></div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step"><div class="pipe-node" style="background:var(--amber-l)">📚</div><div class="pipe-lbl">Learning</div><div class="pipe-sub">Video + Pre/Post + Survey</div></div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step"><div class="pipe-node" style="background:var(--red-l)">📈</div><div class="pipe-lbl">Impact MGA</div><div class="pipe-sub">Urban vs Rural</div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- SKILL GAP -->
+<section id="gap" class="section">
+<div class="wrap">
+  <div class="pg-hdr">
+    <div class="eyebrow">Phase 1 · NLP Cosine Similarity Analysis</div>
+    <h1>Skill Gap Heatmap</h1>
+    <p>Cosine similarity scores between 2026 industry job description requirements and Vietnamese university syllabi. Scores below <strong style="color:var(--red)">0.60</strong> automatically trigger adaptive module deployment.</p>
+  </div>
+  <div class="stabs" id="gapTabs">
+    <button class="stab st-b" onclick="switchSector('marketing')" id="gtab-marketing">📣 Marketing</button>
+    <button class="stab" onclick="switchSector('finance')" id="gtab-finance">🏦 Finance & Banking</button>
+    <button class="stab" onclick="switchSector('logistics')" id="gtab-logistics">🚚 Logistics & Supply Chain</button>
+  </div>
+  <div class="scan-bar"><div class="sw"><span></span><span></span><span></span><span></span><span></span></div><span id="scanTxt">Live scan · Last update: <strong>2 min ago</strong></span></div>
+  <div class="g65">
+    <div class="card">
+      <div class="card-h"><div class="card-title" id="hmTitle">Heatmap</div><div class="ctag ct-r" id="hmTag">GAPS</div></div>
+      <div class="hm-wrap"><table class="hm-table"><thead id="hmHead"></thead><tbody id="hmBody"></tbody></table></div>
+      <div class="hm-legend">
+        <div class="hm-leg"><div class="hm-dot" style="background:#fddcdc"></div>&lt;0.30 Critical</div>
+        <div class="hm-leg"><div class="hm-dot" style="background:#fef0c7"></div>0.30–0.39 Very Low</div>
+        <div class="hm-leg"><div class="hm-dot" style="background:#fff4e6"></div>0.40–0.49 Low</div>
+        <div class="hm-leg"><div class="hm-dot" style="background:#e8effe"></div>0.50–0.59 Moderate</div>
+        <div class="hm-leg"><div class="hm-dot" style="background:#e7f5ef"></div>≥0.60 Acceptable</div>
+      </div>
+    </div>
+    <div>
+      <div class="card"><div class="card-h"><div class="card-title">Top Skill Gaps</div><div class="ctag ct-r">PRIORITY</div></div><div id="gapBars"></div></div>
+      <div class="card"><div class="card-h"><div class="card-title">Skill Clusters</div><div class="ctag ct-a">GROUPED</div></div><div id="clusterList"></div></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:4px">
+    <div class="card-h"><div class="card-title">Sector Comparison Chart</div><div class="ctag ct-b">ANALYTICS</div></div>
+    <canvas id="gapChart" height="120"></canvas>
+  </div>
+</div>
+</section>
+
+<!-- PIPELINE -->
+<section id="pipeline" class="section">
+<div class="wrap">
+  <div class="pg-hdr">
+    <div class="eyebrow">System Architecture · Automated Workflow</div>
+    <h1>Adaptive Syllabus Pipeline</h1>
+    <p>The autonomous 6-stage engine — from JD scraping to cross-sector impact measurement across all three Vietnamese university sectors.</p>
+  </div>
+  <div class="card">
+    <div class="card-h"><div class="card-title">6-Stage Cycle — All 3 Sectors</div><div class="badge b-green"><span class="live-dot"></span> RUNNING</div></div>
+    <div class="g3" id="pipe1"></div>
+    <div style="text-align:center;color:var(--ink4);font-size:20px;margin:10px 0">↓</div>
+    <div class="g3" id="pipe2"></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-h"><div class="card-title">Trigger Algorithm</div><div class="ctag ct-b">THRESHOLD 0.60</div></div>
+      <div class="code-block">
+        <span style="color:#94a3b8">// VAIL Multi-Sector Trigger Engine</span><br>
+        <span style="color:#fbbf24">for each</span> sector <span style="color:#fbbf24">in</span> [Marketing, Finance, Logistics]:<br>
+        &nbsp;&nbsp;<span style="color:#fbbf24">for each</span> skill_cluster:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;sim = cosine_sim(JD_vector, syllabus_vector)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#fbbf24">if</span> sim &lt; <span style="color:#f87171">0.60</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#a5f3fc">alert.trigger("CRITICAL")</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#a5f3fc">module.auto_deploy(sector, skill)</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#a5f3fc">test.push(pre_test, post_test)</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#fbbf24">elif</span> sim &lt; <span style="color:#fbbf24">0.70</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#fbbf24">alert.queue("WARNING")</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#fbbf24">else</span>: status = <span style="color:#a5f3fc">"ALIGNED ✓"</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-h"><div class="card-title">Pilot Timeline</div><div class="ctag ct-g">2026</div></div>
+      <div id="timeline"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-h"><div class="card-title">Static Administration → Dynamic Adaptive System</div><div class="ctag ct-b">TRANSFORMATION</div></div>
+    <table class="comp-table">
+      <thead><tr><th>Dimension</th><th style="color:var(--red)">Static (Current)</th><th style="color:var(--green)">Dynamic (VAIL)</th></tr></thead>
+      <tbody id="compBody"></tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+<!-- MODULES -->
+<section id="modules" class="section">
+<div class="wrap">
+  <div class="pg-hdr">
+    <div class="eyebrow">Adaptive Micro-Learning · Auto-Generated</div>
+    <h1>Deployed Modules</h1>
+    <p>AI-generated micro-learning patches per sector. Each module includes an AI-narrated video, knowledge summary, interactive quiz, and impact survey.</p>
+  </div>
+  <div class="stabs">
+    <button class="stab st-b" onclick="switchModSector('marketing')" id="mtab-marketing">📣 Marketing</button>
+    <button class="stab" onclick="switchModSector('finance')" id="mtab-finance">🏦 Finance</button>
+    <button class="stab" onclick="switchModSector('logistics')" id="mtab-logistics">🚚 Logistics</button>
+  </div>
+  <div class="mod-grid" id="modGrid"></div>
+  <div id="mod-detail"><div class="mod-detail-wrap"><div id="modDetailBox"></div></div></div>
+</div>
+</section>
+
+<!-- ASSESSMENT -->
+<section id="tests" class="section">
+<div class="wrap">
+  <div class="pg-hdr">
+    <div class="eyebrow">Assessment Instruments · Module Validation</div>
+    <h1>Pre-Test & Post-Test</h1>
+    <p>Standardised assessment instruments measuring AI image generation & prompt engineering competency. Answer all questions to unlock the answer review.</p>
+  </div>
+  <div class="stabs">
+    <button class="stab st-b" onclick="switchTest('pre')" id="ttab-pre">Pre-Test · 13 Questions</button>
+    <button class="stab" onclick="switchTest('post')" id="ttab-post">Post-Test · Part A + Part B</button>
+    <button class="stab" onclick="switchTest('results')" id="ttab-results">Results Dashboard</button>
+  </div>
+  <div id="testContent"></div>
+</div>
+</section>
+
+<!-- PILOT COHORT -->
+<section id="pilot" class="section">
+<div class="wrap">
+  <div class="pg-hdr">
+    <div class="eyebrow">Empirical Validation · Pre/Post Analysis</div>
+    <h1>Pilot Cohort — 18 Students</h1>
+    <p>18 students from UEH enrolled in the Prompt Engineering module. Pre-test baseline measured before module exposure; post-test conducted after completing the AI image generation video and exercises.</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card sc-r"><div class="s-lbl">Avg Pre-Test</div><div class="s-val sv-r">44%</div><div class="s-sub">Before module · n=18</div></div>
+    <div class="stat-card sc-g"><div class="s-lbl">Avg Post-Test</div><div class="s-val sv-g">93%</div><div class="s-sub">After module · n=18</div></div>
+    <div class="stat-card sc-b"><div class="s-lbl">Avg Improvement</div><div class="s-val sv-b">+49pp</div><div class="s-sub">+111% relative gain</div></div>
+    <div class="stat-card sc-a"><div class="s-lbl">Pass Rate (≥70%)</div><div class="s-val sv-a">94%</div><div class="s-sub">Post-test · up from 11%</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-h">
+      <div class="card-title">Pre vs Post Score Comparison — All 18 Students</div>
+      <div class="cohort-tabs">
+        <button class="coh-tab active" onclick="switchCohort('all',this)">All</button>
+        <button class="coh-tab" onclick="switchCohort('hanoi',this)">Hanoi</button>
+        <button class="coh-tab" onclick="switchCohort('hcm',this)">HCM / Other</button>
+      </div>
+    </div>
+    <canvas id="pilotChart" height="180"></canvas>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="card-title">Student Detail Results</div><div class="ctag ct-g">VERIFIED DATA · n=18</div></div>
+    <div style="overflow-x:auto">
+    <table class="stu-table" id="stuTable">
+      <thead><tr>
+        <th>#</th><th>Student</th><th>Email</th><th>City</th>
+        <th style="text-align:center">Pre-Test<br><span style="font-weight:400;color:var(--ink4)">/13 questions</span></th>
+        <th style="text-align:center">Post-Test<br><span style="font-weight:400;color:var(--ink4)">/30 points</span></th>
+        <th style="text-align:center">Pre %</th>
+        <th style="text-align:center">Post %</th>
+        <th style="text-align:center">Gain</th>
+        <th>Progress</th>
+      </tr></thead>
+      <tbody id="stuBody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><div class="card-title">Geographic Distribution — Hanoi vs HCM/Other</div><div class="ctag ct-v">EQUITY ANALYSIS</div></div>
+    <canvas id="mgaChart" height="100"></canvas>
+    <div style="background:var(--green-l);border:1px solid rgba(10,110,79,0.2);border-radius:9px;padding:13px;margin-top:14px">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px">Key Finding: Geographic Equity</div>
+      <div style="font-size:11px;color:var(--ink3);line-height:1.7">Hanoi students (n=7) improved from avg <strong>42% → 95%</strong> (+53pp). HCM/Other students (n=11) improved from avg <strong>45% → 91%</strong> (+46pp). Both cohorts demonstrated exceptional gains, validating the VAIL module's effectiveness across geographic contexts.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="tooltip" id="tip"></div>
+
+<script>
+// ═══════════════ DATA ═══════════════
+const SD = {
+  marketing:{
+    name:"Marketing",color:"var(--blue)",
+    scanTxt:"10,247 Marketing JDs processed · Avg similarity 0.47",
+    unis:["UEH","TMU","UEL","NEU","FTU","HUB"],
+    heatmap:[
+      {s:"AI Content & Writing",v:[0.53,0.56,0.38,0.61,0.50,0.34]},
+      {s:"AI Integration & Automation",v:[0.56,0.35,0.30,0.37,0.59,0.22]},
+      {s:"Prompt Engineering",v:[0.46,0.42,0.41,0.44,0.45,0.37]},
+      {s:"AI Customer Support & CRM",v:[0.53,0.43,0.47,0.48,0.50,0.29]},
+      {s:"AI Data Analytics",v:[0.68,0.56,0.54,0.55,0.59,0.41]},
+      {s:"AI Marketing & Strategy",v:[0.58,0.55,0.57,0.59,0.57,0.57]},
+      {s:"AI Multimedia & Creative",v:[0.64,0.54,0.59,0.63,0.52,0.36]},
+      {s:"AI Product Development",v:[0.58,0.45,0.41,0.45,0.53,0.37]},
+    ],
+    gaps:[{n:"Generative AI",p:100,c:"#c23030"},{n:"AI Data Analytics",p:78,c:"#c23030"},{n:"AI Copywriting",p:72,c:"#c23030"},{n:"Prompt Engineering",p:68,c:"#a05c0a"},{n:"AI Video Creation",p:65,c:"#a05c0a"},{n:"AI CRM Integration",p:58,c:"#1a4fd6"}],
+    clusters:[{n:"Generative AI & LLMs",k:6,g:"100%",c:"#c23030"},{n:"AI Data Analytics",k:5,g:"78%",c:"#c23030"},{n:"AI Content Creation",k:5,g:"72%",c:"#a05c0a"},{n:"Marketing Automation",k:5,g:"68%",c:"#a05c0a"},{n:"AI Strategy",k:5,g:"64%",c:"#a05c0a"},{n:"Customer AI Tools",k:5,g:"58%",c:"#1a4fd6"}],
+    gapN:35,avgS:"0.47",
+  },
+  finance:{
+    name:"Finance & Banking",color:"var(--green)",
+    scanTxt:"8,130 Finance & Banking JDs processed · Avg similarity 0.29",
+    unis:["TMU","UEL","FTU","UEH","NEU"],
+    heatmap:[
+      {s:"AutoML for Financial Analysis",v:[0.34,0.23,0.25,0.34,0.26]},
+      {s:"LLM & NLP for Finance",v:[0.29,0.32,0.24,0.33,0.29]},
+    ],
+    gaps:[{n:"AutoML Tools",p:95,c:"#c23030"},{n:"LLM for Finance",p:88,c:"#c23030"},{n:"AI Risk Modeling",p:82,c:"#c23030"},{n:"AI Credit Scoring",p:75,c:"#a05c0a"},{n:"Algo Trading AI",p:70,c:"#a05c0a"}],
+    clusters:[{n:"AutoML & Prediction",k:3,g:"95%",c:"#c23030"},{n:"LLM Applications",k:3,g:"88%",c:"#c23030"},{n:"AI Risk & Compliance",k:2,g:"75%",c:"#a05c0a"},{n:"AI Trading Systems",k:2,g:"70%",c:"#a05c0a"}],
+    gapN:10,avgS:"0.29",
+  },
+  logistics:{
+    name:"Logistics & Supply Chain",color:"var(--amber)",
+    scanTxt:"6,892 Logistics & Supply Chain JDs processed · Avg similarity 0.47",
+    unis:["TMU","NEU","UEH","UEL","FTU"],
+    heatmap:[
+      {s:"GenAI for Document & Contract",v:[0.38,0.44,0.41,0.42,0.44]},
+      {s:"AI Data Analytics & Forecasting",v:[0.65,0.42,0.57,0.48,0.45]},
+      {s:"Logistics & Route Optimization",v:[0.66,0.53,0.53,0.44,0.43]},
+      {s:"AI Customer Service Agents",v:[0.61,0.49,0.56,0.43,0.48]},
+      {s:"AI-powered Sourcing & Research",v:[0.58,0.45,0.55,0.40,0.31]},
+      {s:"Digital Transformation & Auto.",v:[0.59,0.45,0.50,0.44,0.40]},
+      {s:"Multilingual AI Communication",v:[0.47,0.41,0.52,0.53,0.37]},
+    ],
+    gaps:[{n:"AI Route Optimization",p:92,c:"#c23030"},{n:"GenAI for Documents",p:85,c:"#c23030"},{n:"AI Sourcing Tools",p:78,c:"#c23030"},{n:"AI Forecasting",p:72,c:"#a05c0a"},{n:"Multilingual AI",p:65,c:"#a05c0a"},{n:"Digital Automation",p:58,c:"#1a4fd6"}],
+    clusters:[{n:"AI Route & Logistics",k:2,g:"92%",c:"#c23030"},{n:"GenAI Document Tools",k:2,g:"85%",c:"#c23030"},{n:"AI Sourcing & Research",k:2,g:"78%",c:"#a05c0a"},{n:"AI Forecasting",k:2,g:"72%",c:"#a05c0a"},{n:"Multilingual AI",k:1,g:"65%",c:"#a05c0a"}],
+    gapN:9,avgS:"0.47",
+  }
+};
+
+// STUDENT DATA (from actual Excel files)
+const STUDENTS = [
+  {name:"Nguyễn Duy",email:"nd919959@gmail.com",city:"Hanoi",preRaw:7,postRaw:28,pre:54,post:93},
+  {name:"Dương Minh Tuấn",email:"duongbigring@gmail.com",city:"Ho Chi Minh City",preRaw:6,postRaw:29,pre:46,post:97},
+  {name:"Nguyễn Đức Nicolas",email:"nicolaasspecter@gmail.com",city:"Ho Chi Minh City",preRaw:8,postRaw:29,pre:62,post:97},
+  {name:"Lê Thu Giang",email:"giangjas758@gmail.com",city:"Hanoi",preRaw:5,postRaw:30,pre:38,post:100},
+  {name:"Trần Chloe Giang",email:"chloegiang@gmail.com",city:"Ho Chi Minh City",preRaw:5,postRaw:30,pre:38,post:100},
+  {name:"Trần Hoàng Minh",email:"minh0204200@gmail.com",city:"Dong Nai",preRaw:5,postRaw:27,pre:38,post:90},
+  {name:"Nguyễn Thanh Tâm",email:"thanhtam02112003@gmail.com",city:"Ho Chi Minh City",preRaw:5,postRaw:28,pre:38,post:93},
+  {name:"Nguyễn Thị Thu Sương",email:"nttss171092@fpt.edu.vn",city:"Ho Chi Minh City",preRaw:3,postRaw:30,pre:23,post:100},
+  {name:"Phạm Ngọc Hân",email:"chuheocondethuong@gmail.com",city:"Hanoi",preRaw:4,postRaw:25,pre:31,post:83},
+  {name:"Đỗ Daniel",email:"danielsr1209@gmail.com",city:"Ho Chi Minh City",preRaw:4,postRaw:27,pre:31,post:90},
+  {name:"Trần Phương Thảo",email:"thaotp.forworkspace@gmail.com",city:"Hanoi",preRaw:7,postRaw:27,pre:54,post:90},
+  {name:"Võ Mỹ Linh",email:"arielthelittlemermaid@gmail.com",city:"Ho Chi Minh City",preRaw:4,postRaw:15,pre:31,post:50},
+  {name:"Trần Thị Ngọc Lành",email:"tranthingoclanh3@gmail.com",city:"Hanoi",preRaw:8,postRaw:30,pre:62,post:100},
+  {name:"Kiều Khánh Huyền",email:"khnhhuyn1507@gmail.com",city:"Ho Chi Minh City",preRaw:10,postRaw:29,pre:77,post:97},
+  {name:"Phạm Charlotte",email:"charlottepham@gmail.com",city:"Hanoi",preRaw:4,postRaw:30,pre:31,post:100},
+  {name:"Lê Hoàng Phát",email:"phatpro1411@gmail.com",city:"Ho Chi Minh City",preRaw:5,postRaw:28,pre:38,post:93},
+  {name:"Phạm Huy",email:"phamhuy007@gmail.com",city:"Hanoi",preRaw:3,postRaw:30,pre:23,post:100},
+  {name:"Nguyễn Phi Linh",email:"linhphisvnu@gmail.com",city:"Ho Chi Minh City",preRaw:10,postRaw:29,pre:77,post:97},
+];
+
+// PRE-TEST — 13 questions
+const preTest = [
+  {q:"During the process of generating images with AI, what is the core role of a prompt?",
+   opts:["To control the content, style, and image attributes that the AI will generate","To help AI automatically search for images from the Internet","To store all sample images in the system before generating","To completely replace the processing capability of the AI model"],ans:0,
+   expl:"A prompt is the creative instruction that controls everything the AI generates — content, style, mood, composition, and attributes. It does not search the internet or replace the AI model."},
+  {q:"Which of the following components helps AI best understand the desired image style?",
+   opts:["Only mentioning the main subject in the image","Clearly describing the image style, lighting, colors, and desired mood","Writing the prompt as short as possible","Only using separate English keywords"],ans:1,
+   expl:"Style clarity comes from describing multiple dimensions together: art style, lighting, color palette, and mood. Mentioning only the subject leaves the AI to guess everything else."},
+  {q:"When AI generates images that are too generic or do not match the intended idea, the most effective way to improve is:",
+   opts:["Add detailed descriptions of subject, background, lighting, camera angle, and image style","Ask the AI to regenerate many times without changing the prompt","Reduce the amount of information in the prompt","Only add many random keywords to increase diversity"],ans:0,
+   expl:"Adding specificity — subject detail, background, lighting, camera angle, and style — gives the AI the guidance it needs. Regenerating without changes will produce similar results each time."},
+  {q:"When you want AI to create more photorealistic images, which element should be clearly described?",
+   opts:["Lighting, surface texture, level of detail, and realistic camera angles","Only the name of the main object","The AI's image processing time","The output file size"],ans:0,
+   expl:"Photorealism depends on technical visual descriptors: lighting type, material texture, depth of field, and camera perspective. These signal to the AI to prioritize realism over stylization."},
+  {q:"Which of the following statements is most correct about a high-quality image generation prompt?",
+   opts:["The longer the prompt, the more beautiful the image will definitely be","The prompt only needs to describe the main subject","A quality prompt should clearly describe the subject, context, style, lighting, and important attributes","The most effective prompt contains many unrelated keywords"],ans:2,
+   expl:"Quality comes from precision and coherence, not length. A strong prompt addresses multiple dimensions: subject, context, art style, lighting, and mood — working together, not randomly."},
+  {q:"What happens if the prompt is too vague or lacks detail?",
+   opts:["The AI always creates an accurate image","The AI will automatically figure out the user's exact idea","The resulting image may not match the user's expectations","The AI completely stops generating images"],ans:2,
+   expl:"Vague prompts force the AI to fill in the gaps itself, resulting in generic or unexpected images. AI does not 'know' the user's intent unless it is explicitly stated."},
+  {q:"What helps AI better understand the context of an image?",
+   opts:["Describing the environment surrounding the subject","Only writing the character's name","Not using adjectives","Only entering colors"],ans:0,
+   expl:"Context comes from describing the environment, setting, and surrounding elements. A character placed 'in a misty ancient forest at dusk' gives far more context than just their name."},
+  {q:"An AI-generated image looks too 'fake' and lacks realism. What is the most effective way to improve it?",
+   opts:["Add elements such as natural lighting, skin texture, depth of field, and realistic camera descriptions","Reduce all details so the AI can optimize itself","Only increase the output image resolution","Ask the AI to use many striking color effects"],ans:0,
+   expl:"Realism is achieved by specifying realistic visual parameters: naturalistic lighting, physical texture, camera optics like depth of field, and lens type. These prompt the AI to model real-world physics."},
+  {q:"A designer needs to quickly create promotional posters in cyberpunk, minimalism, and cinematic styles. What is the most effective approach?",
+   opts:["Use the same prompt for every style to ensure consistency","Create separate prompts for each style with appropriate descriptions of lighting, colors, and composition","Only change the image colors without changing the main prompt","Let the AI decide the entire style automatically"],ans:1,
+   expl:"Each visual style requires its own distinct vocabulary of descriptors. Cyberpunk, minimalism, and cinematic are fundamentally different aesthetic systems requiring dedicated prompts for each."},
+  {q:"In applying AI image generation to creative work, the highest effectiveness is achieved when:",
+   opts:["AI completely replaces the designer automatically","Users know how to combine prompt-building skills with selecting and refining output results","Using as many different AI models as possible for the same task","Focusing only on image generation speed without checking quality"],ans:1,
+   expl:"AI image generation is a collaborative tool. The most effective practitioners combine strong prompting skills with curatorial judgment — selecting, evaluating, and iterating on AI outputs."},
+  {q:"A fashion brand uses AI for Instagram and TikTok but both platforms end up with very similar visuals. What is the most suitable instruction?",
+   opts:["Keep the same visual style to maintain brand consistency","Ask the AI to focus only on highlighting the product","Adjust the prompt according to user behavior on each platform — layout, colors, visual rhythm, and style","Only ask the AI to add as many trendy effects as possible"],ans:2,
+   expl:"Instagram and TikTok have different visual cultures, aspect ratios, and audience behaviors. Effective platform-specific content requires tailored prompts reflecting each platform's format and aesthetic conventions."},
+  {q:"After AI generates multiple image versions for a media campaign, what is the most appropriate next step?",
+   opts:["Evaluate each version based on communication goals, brand identity, and target audience","Combine standout details from multiple versions","Refine the prompt based on weaker versions to improve results","All of the above"],ans:3,
+   expl:"All three actions represent legitimate creative direction: evaluating against objectives, synthesizing strong elements, and using weaknesses to refine future prompts. A comprehensive approach is most effective."},
+  {q:"A group of students used AI to create a poster for a technology workshop, but the result looked messy, lacked focus, and did not match the desired style. What is the group's main problem?",
+   opts:["They do not know how to use professional photo-editing software","They lack the ability to turn visual ideas, style, and layout into specific prompts for AI","AI is not suitable for creating images for technology workshops","They lack social media posting skills"],ans:1,
+   expl:"The root cause of poor AI image outputs is nearly always weak prompting — the inability to translate a visual idea into the specific descriptors the AI needs. The tool is capable; the instruction was insufficient."},
+];
+
+// POST-TEST Part A — 10 MCQ
+const postTestA = [
+  {q:"In the core prompt formula, which component mainly controls the emotional atmosphere of the image?",
+   opts:["Technical Specs","Mood & Atmosphere","Art Style","Subject"],ans:1,
+   expl:"'Mood & Atmosphere' (e.g., 'melancholic', 'ethereal', 'dreamlike') directly controls the emotional tone. Technical Specs control rendering quality; Art Style controls aesthetic reference; Subject defines content."},
+  {q:"Which prompt below is the strongest?",
+   opts:["a girl in a city","a cyberpunk girl","a melancholic cyberpunk girl standing under neon rain, cinematic lighting, reflective wet streets, 8K","a futuristic city"],ans:2,
+   expl:"The strongest prompt includes all key components: subject ('melancholic cyberpunk girl'), context ('under neon rain'), lighting ('cinematic lighting'), environmental detail ('reflective wet streets'), and technical spec ('8K'). Vague prompts cannot guide AI effectively."},
+  {q:"Match: Which example correctly corresponds to 'Lighting'?",
+   opts:["dreamlike, haunting","octane render, 8K","Rembrandt lighting","golden hour glow"],ans:2,
+   expl:"'Rembrandt lighting' is a specific lighting technique (directional side-lighting with a small triangle of light on the shadow cheek), making it the clearest 'Lighting' example. 'Golden hour glow' is also lighting — but 'Rembrandt lighting' is the most technically precise match."},
+  {q:"\"The more impossible the surreal detail is, the more visually striking the image usually becomes.\"",
+   opts:["False","True","Depends on the AI model","Only applies to abstract art"],ans:1,
+   expl:"Surreal details that defy physical reality — giant whales floating between skyscrapers, trees growing from circuit boards — create visual impact precisely because they are impossible. The impossibility creates contrast and intrigue."},
+  {q:"Which keyword belongs to the 'Art Style' category?",
+   opts:["candlelight glow","melancholic","inspired by Salvador Dalí","35mm film grain"],ans:2,
+   expl:"'Inspired by Salvador Dalí' references a specific artistic tradition and aesthetic, making it an Art Style descriptor. 'Candlelight glow' is lighting; 'melancholic' is mood; '35mm film grain' is a technical spec."},
+  {q:"List all 6 components of a strong AI image prompt — which answer is complete?",
+   opts:["Subject, Art Style, Color, Mood, Resolution, Camera","Subject, Art Style, Lighting, Mood/Atmosphere, Technical Specs, Surreal Detail","Subject, Background, Lighting, Emotion, Format, Size","Subject, Style, Filter, Composition, Tone, Render"],ans:1,
+   expl:"The 6 canonical components are: Subject, Art Style, Lighting, Mood/Atmosphere, Technical Specs, and Surreal Detail. Other options conflate or mislabel categories."},
+  {q:"Which statement best describes 'Golden Rule #1'?",
+   opts:["Prompts should always be very long","Think like a director or painter","Only use famous keywords","Always mention an artist name"],ans:1,
+   expl:"Golden Rule #1 is: 'Think like a director or painter.' This means composing the image in your mind first — deciding on framing, mood, light source, and visual narrative — before translating that vision into words."},
+  {q:"Which component is MISSING in: 'A giant whale floating above a city, dreamlike, cinematic lighting'?",
+   opts:["Subject","Mood","Technical Specs","Surreal Detail"],ans:2,
+   expl:"This prompt has: Subject ('giant whale floating above a city'), Mood ('dreamlike'), Lighting ('cinematic lighting'), and Surreal Detail (the floating whale). What is missing is Technical Specs (e.g., '8K', 'ultra-detailed', 'depth of field')."},
+  {q:"Which keyword describes a lighting effect?",
+   opts:["ethereal","octane render","neon rim light","Art Nouveau"],ans:2,
+   expl:"'Neon rim light' describes a specific photographic lighting technique where colored neon light creates a glowing outline around the subject. 'Ethereal' is mood; 'octane render' is a rendering engine (Technical Spec); 'Art Nouveau' is an art style."},
+  {q:"Why do more specific prompts help AI generate more accurate images?",
+   opts:["AI needs more text to function","Specific prompts reduce ambiguity and help control style, mood, lighting, and composition","AI cannot understand short prompts","Specific prompts increase rendering speed"],ans:1,
+   expl:"Specificity works by reducing the AI's degrees of freedom. When style, mood, lighting, and composition are defined, the AI has a precise target rather than having to guess, resulting in images that match the user's intent."},
+];
+
+// POST-TEST Part B
+const postTestB = [
+  {title:"Exercise 1 — Upgrade a Weak Prompt",pts:5,prompt:'"a woman in a forest"',
+   task:"Rewrite and improve this prompt by adding: clear subject · art style · lighting · mood · technical details · a surreal element",
+   rubric:[["Clear, specific subject description","1 pt"],["Named art style or artistic reference","1 pt"],["Lighting type described","1 pt"],["Mood / atmosphere specified","1 pt"],["Technical specs + surreal element included","1 pt"]],
+   example:'A lone warrior woman standing in an ancient mystical forest, inspired by Alphonse Mucha, dappled golden hour light filtering through ancient trees, melancholic and ethereal atmosphere, cinematic depth of field, 8K ultra-detailed, with bioluminescent butterflies weaving through her armor like living light'},
+  {title:"Exercise 2 — Prompt Structure Analysis",pts:5,
+   prompt:'"A translucent monk floating above an abandoned temple, inspired by Alphonse Mucha, golden hour lighting, melancholic and ethereal atmosphere, cinematic depth of field, 8K ultra detailed, surrounded by levitating lotus petals"',
+   task:"Identify each of the 6 components in the prompt above:",
+   rubric:[["Subject","A translucent monk floating above an abandoned temple"],["Art Style","inspired by Alphonse Mucha"],["Lighting","golden hour lighting"],["Mood / Atmosphere","melancholic and ethereal atmosphere"],["Technical Specs","cinematic depth of field, 8K ultra detailed"],["Surreal Detail","surrounded by levitating lotus petals"]],isAnalysis:true},
+  {title:"Exercise 3 — Create a Complete Prompt",pts:10,
+   task:'Create a complete hyper-realistic AI image prompt based on ONE of these themes:\n1. "A Dream of the Future"\n2. "Loneliness in the City"\n3. "Nature and Technology Becoming One"\n\nMust include all 6 components. Suggested length: 40–80 words.',
+   rubric:[["Clear and original subject","2 pts"],["Appropriate and named art style","2 pts"],["Effective lighting description","1 pt"],["Strong mood / atmosphere","1 pt"],["Good technical specifications","2 pts"],["Creative surreal detail","2 pts"]],
+   example:'A solitary android sitting on a rooftop garden in a rain-soaked megacity, inspired by Syd Mead, soft bioluminescent moonlight diffused through acid rain, melancholic yet hopeful atmosphere, anamorphic lens flare, 8K cinematic, with vines of living circuitry flowering from its chest into the storm above'},
+];
+
+// ═══════════════ STATE ═══════════════
+let curSector='marketing',curModSector='marketing',curCohort='all',curMod=null,curTab='video',curTest='pre';
+let preState={answers:{},revealed:false};
+let postAState={answers:{},revealed:false};
+let svState={answers:{},submitted:false};
+let qzState={q:0,ans:[],started:false,done:false,isPre:true,preScore:null};
+let pilotChartObj=null,mgaChartObj=null,overviewChartObj=null,gapChartObj=null;
+
+// ═══════════════ TICKER ═══════════════
+(function(){
+  const items=["<b>●</b> Marketing — 10,247 JDs · Avg similarity 0.47 · 35 gaps detected","<b>▲</b> Finance — 8,130 JDs · AutoML &amp; LLM gaps critical (avg 0.29)","<b>●</b> Logistics — 6,892 JDs · Route Optimization gap 92%","<b>▲</b> 3 sectors · 6 universities · 54 skill gaps · 8 modules deployed","<b>●</b> Pre-Test avg: 44% → Post-Test avg: 93% · +49pp improvement · n=18","<b>▲</b> 18 pilot students · Hanoi vs HCM equity analysis active"];
+  const full=[...items,...items];
+  document.getElementById('tickerTrack').innerHTML=full.map(t=>`<div class="tick-i">${t}</div>`).join('');
+})();
+
+// ═══════════════ NAV ═══════════════
+function showSec(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const map={overview:'Overview',gap:'Skill Gap',pipeline:'Pipeline',modules:'Modules',tests:'Assessment',pilot:'Cohort Results'};
+  document.querySelectorAll('.nav-btn').forEach(b=>{if(b.textContent.trim()===map[id])b.classList.add('active');});
+  if(id==='gap')setTimeout(buildGapChart,100);
+  if(id==='pilot')setTimeout(buildPilotCharts,100);
+  if(id==='overview')setTimeout(buildOverviewChart,200);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ═══════════════ HEATMAP ═══════════════
+function hc(v){if(v>=0.60)return'hc1';if(v>=0.50)return'hc2';if(v>=0.40)return'hc3';if(v>=0.30)return'hc4';return'hc5';}
+function buildHeatmap(){
+  const sd=SD[curSector];
+  document.getElementById('hmTitle').textContent=`${sd.name} — Cosine Similarity Heatmap 2026`;
+  document.getElementById('hmTag').textContent=`${sd.gapN} GAPS`;
+  document.getElementById('scanTxt').innerHTML=`Live scan · <strong>2 min ago</strong> · ${sd.scanTxt}`;
+  let th=`<tr><th class="hm-sk">Skill Cluster</th>`;
+  sd.unis.forEach(u=>th+=`<th>${u}</th>`);
+  document.getElementById('hmHead').innerHTML=th+'</tr>';
+  let tb='';
+  sd.heatmap.forEach(row=>{
+    tb+=`<tr><td class="hm-skill">${row.s}</td>`;
+    row.v.forEach((v,i)=>{tb+=`<td class="hm-cell ${hc(v)}" onmouseenter="showTip(event,'${row.s}','${sd.unis[i]}',${v})" onmouseleave="hideTip()">${v.toFixed(2)}</td>`;});
+    tb+='</tr>';
+  });
+  document.getElementById('hmBody').innerHTML=tb;
+  document.getElementById('gapBars').innerHTML=sd.gaps.map(g=>`<div class="bar-item"><div class="bar-header"><span class="bar-name">${g.n}</span><span class="bar-pct" style="color:${g.c}">${g.p}% gap</span></div><div class="bar-track"><div class="bar-fill" style="width:${g.p}%;background:${g.c}"></div></div></div>`).join('');
+  document.getElementById('clusterList').innerHTML=sd.clusters.map(c=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;padding:8px 11px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)"><div style="width:7px;height:7px;border-radius:50%;background:${c.c};flex-shrink:0"></div><div style="flex:1;font-size:11px;font-weight:700">${c.n}</div><span style="font-family:var(--fm);font-size:10px;color:${c.c};font-weight:700">${c.g}</span><span style="font-size:10px;color:var(--ink3)">${c.k} skills</span></div>`).join('');
+}
+function switchSector(s){
+  curSector=s;
+  ['marketing','finance','logistics'].forEach(k=>{
+    const el=document.getElementById('gtab-'+k);
+    if(el)el.className='stab'+(s===k?' '+(k==='marketing'?'st-b':k==='finance'?'st-g':'st-a'):'');
+  });
+  buildHeatmap();setTimeout(buildGapChart,100);
+}
+function showTip(e,sk,uni,v){
+  const t=document.getElementById('tip');
+  t.innerHTML=`<strong>${sk}</strong><br>${uni}: <span style="color:${v<0.60?'#fca5a5':'#6ee7b7'};font-family:var(--fm)">${v.toFixed(2)}</span><br><span style="font-size:10px;opacity:.8">${v<0.60?'⚠ Below threshold — module triggered':'✓ Acceptable'}</span>`;
+  t.style.display='block';t.style.left=(e.clientX+12)+'px';t.style.top=(e.clientY-42)+'px';
+}
+function hideTip(){document.getElementById('tip').style.display='none';}
+
+// ═══════════════ CHARTS ═══════════════
+function buildGapChart(){
+  const ctx=document.getElementById('gapChart');if(!ctx)return;
+  if(gapChartObj)gapChartObj.destroy();
+  const sd=SD[curSector];
+  const labels=sd.heatmap.map(r=>r.s.length>26?r.s.slice(0,25)+'…':r.s);
+  const vals=sd.heatmap.map(r=>+(r.v.reduce((a,b)=>a+b,0)/r.v.length).toFixed(2));
+  gapChartObj=new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'Avg Similarity',data:vals,backgroundColor:vals.map(v=>v<0.60?'rgba(194,48,48,0.72)':'rgba(10,110,79,0.72)'),borderRadius:6,borderSkipped:false},
+      {label:'Threshold (0.60)',data:Array(labels.length).fill(0.60),type:'line',borderColor:'rgba(194,48,48,0.85)',borderWidth:2,borderDash:[6,3],pointRadius:0,fill:false},
+    ]},
+    options:{responsive:true,plugins:{legend:{labels:{font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#7a808f'}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y}`}}},scales:{y:{min:0,max:1,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{family:"'Fira Code',monospace",size:10},color:'#b0b6c3'}},x:{grid:{display:false},ticks:{font:{family:"'Plus Jakarta Sans',sans-serif",size:10},color:'#7a808f',maxRotation:30}}}}
+  });
+}
+function buildOverviewChart(){
+  const ctx=document.getElementById('overviewChart');if(!ctx)return;
+  if(overviewChartObj)overviewChartObj.destroy();
+  overviewChartObj=new Chart(ctx,{
+    type:'bar',
+    data:{labels:['📣 Marketing','🏦 Finance & Banking','🚚 Logistics & SC'],
+      datasets:[
+        {label:'Avg Similarity',data:[0.47,0.29,0.47],backgroundColor:['rgba(26,79,214,0.72)','rgba(10,110,79,0.72)','rgba(160,92,10,0.72)'],borderRadius:8,borderSkipped:false},
+        {label:'Threshold (0.60)',data:[0.60,0.60,0.60],type:'line',borderColor:'rgba(194,48,48,0.85)',borderWidth:2,borderDash:[6,3],pointRadius:0,fill:false},
+      ]},
+    options:{responsive:true,plugins:{legend:{labels:{font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#7a808f'}}},scales:{y:{min:0,max:1,ticks:{font:{family:"'Fira Code',monospace",size:10},color:'#b0b6c3'},grid:{color:'rgba(0,0,0,0.05)'}},x:{grid:{display:false},ticks:{font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#3d4150'}}}}
+  });
+}
+function buildPilotCharts(){
+  const filter=curCohort==='all'?STUDENTS:STUDENTS.filter(s=>curCohort==='hanoi'?s.city==='Hanoi':s.city!=='Hanoi');
+  const ctx=document.getElementById('pilotChart');
+  if(!ctx)return;
+  if(pilotChartObj)pilotChartObj.destroy();
+  pilotChartObj=new Chart(ctx,{
+    type:'bar',
+    data:{labels:filter.map(s=>s.name.split(' ').slice(-1)[0]),
+      datasets:[
+        {label:'Pre-Test %',data:filter.map(s=>s.pre),backgroundColor:'rgba(194,48,48,0.55)',borderRadius:4,borderSkipped:false},
+        {label:'Post-Test %',data:filter.map(s=>s.post),backgroundColor:filter.map(s=>s.city==='Hanoi'?'rgba(26,79,214,0.78)':'rgba(10,110,79,0.78)'),borderRadius:4,borderSkipped:false},
+      ]},
+    options:{responsive:true,plugins:{legend:{labels:{font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#7a808f'}},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y}%`,afterLabel:c=>{const s=filter[c.dataIndex];return `${s.name} · ${s.city}`;},}}},scales:{y:{max:100,min:0,ticks:{font:{family:"'Fira Code',monospace",size:9},color:'#b0b6c3'},grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{font:{family:"'Plus Jakarta Sans',sans-serif",size:9},color:'#7a808f',maxRotation:45},grid:{display:false}}}}
+  });
+  const mgaCtx=document.getElementById('mgaChart');
+  if(!mgaCtx)return;
+  if(mgaChartObj)mgaChartObj.destroy();
+  const hanoi=STUDENTS.filter(s=>s.city==='Hanoi');
+  const other=STUDENTS.filter(s=>s.city!=='Hanoi');
+  const avgPre=g=>Math.round(g.reduce((a,s)=>a+s.pre,0)/g.length);
+  const avgPost=g=>Math.round(g.reduce((a,s)=>a+s.post,0)/g.length);
+  mgaChartObj=new Chart(mgaCtx,{
+    type:'bar',
+    data:{labels:['Hanoi (n=7)','HCM / Other (n=11)'],
+      datasets:[
+        {label:'Pre-Test Avg',data:[avgPre(hanoi),avgPre(other)],backgroundColor:['rgba(194,48,48,0.6)','rgba(194,48,48,0.6)'],borderRadius:6,stack:'s'},
+        {label:'Post-Test Avg',data:[avgPost(hanoi),avgPost(other)],backgroundColor:['rgba(26,79,214,0.78)','rgba(10,110,79,0.78)'],borderRadius:6,stack:'p'},
+      ]},
+    options:{indexAxis:'y',responsive:true,plugins:{legend:{labels:{font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#7a808f'}}},scales:{x:{max:105,min:0,ticks:{font:{family:"'Fira Code',monospace",size:10},color:'#b0b6c3'},grid:{color:'rgba(0,0,0,0.05)'}},y:{grid:{display:false},ticks:{font:{family:"'Plus Jakarta Sans',sans-serif",size:12},color:'#3d4150'}}}}
+  });
+}
+function switchCohort(c,el){curCohort=c;document.querySelectorAll('.coh-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');buildPilotCharts();}
+
+// ═══════════════ OVERVIEW ═══════════════
+function buildOverview(){
+  document.getElementById('ovBars').innerHTML=['Marketing','Finance & Banking','Logistics & SC'].map((n,i)=>{
+    const avg=[0.47,0.29,0.47][i];const c=['var(--blue)','var(--green)','var(--amber)'][i];const gaps=[35,10,9][i];
+    return `<div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;margin-bottom:5px;align-items:center"><span style="font-size:13px;font-weight:700;color:${c}">${n}</span><span style="font-size:11px;color:var(--ink3)">${gaps} gaps · Avg: <span style="color:${avg<0.45?'var(--red)':'var(--amber)'};font-family:var(--fm);font-weight:700">${avg}</span></span></div><div style="position:relative;height:10px;background:var(--surface3);border-radius:5px;overflow:visible;margin-bottom:2px"><div style="height:100%;width:${avg*100}%;background:${c};border-radius:5px;opacity:0.85"></div><div style="position:absolute;left:60%;top:-4px;width:1.5px;height:18px;background:var(--red);border-radius:1px"></div></div><div style="display:flex;justify-content:space-between;font-size:9px;color:var(--ink4);font-family:var(--fm)"><span>0.0</span><span style="color:var(--red)">0.60 threshold</span><span>1.0</span></div></div>`;
+  }).join('')+`<div style="background:var(--red-l);border:1px solid rgba(194,48,48,0.2);border-radius:8px;padding:11px;margin-top:4px"><div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:3px">All 3 sectors below 0.60 threshold</div><div style="font-size:10px;color:var(--ink3);line-height:1.65">8 adaptive modules auto-deployed. 18 students piloted Prompt Engineering module — avg improvement +49pp.</div></div>`;
+  document.getElementById('ovAlerts').innerHTML=[
+    {cl:'ai-crit',icon:'🚨',t:'Finance: AutoML — 100% Market Gap',d:'Absent from all 5 Finance university syllabi. Module deployed.'},
+    {cl:'ai-crit',icon:'🚨',t:'Marketing: Generative AI — 100% Gap',d:'Not found in any Marketing syllabus. Module live.'},
+    {cl:'ai-crit',icon:'🚨',t:'Logistics: AI Route Opt. — 92% Gap',d:'Critical across all 5 Logistics universities.'},
+    {cl:'ai-warn',icon:'⚠',t:'Finance: LLM/NLP avg 0.29',d:'Lowest similarity score across all 3 sectors.'},
+    {cl:'ai-info',icon:'ℹ',t:'Pilot Complete: +49pp Average Gain',d:'18 students · Prompt Engineering module · n=18.'},
+  ].map(a=>`<div class="alert-item ${a.cl}"><div style="font-size:15px;flex-shrink:0">${a.icon}</div><div><div style="font-weight:700;font-size:12px;margin-bottom:1px;color:var(--ink)">${a.t}</div><div style="font-size:10px;color:var(--ink3)">${a.d}</div></div></div>`).join('');
+}
+
+// ═══════════════ PIPELINE ═══════════════
+function buildPipeline(){
+  const s1=[
+    {i:'🌐',t:'Stage 1 · Market Scanning',d:'Octoparse collects 25,000+ JDs/day from VietnamWorks & LinkedIn across Marketing, Finance and Logistics sectors.'},
+    {i:'🧮',t:'Stage 2 · NLP Vectorization',d:'Python NLTK/spaCy tokenizes JD text. TF-IDF vectors built. Cosine similarity computed against 6 university syllabi.'},
+    {i:'📊',t:'Stage 3 · Gap Detection',d:'Similarity matrix generated. 54 skill gaps across 3 sectors identified. 17 clusters grouped. Scores below 0.60 auto-flagged.'},
+  ];
+  const s2=[
+    {i:'📈',t:'Stage 6 · Impact Measurement',d:'Pre/post scores compared per module. Geographic equity analysis. Dashboard updated in real-time.',g:true},
+    {i:'🎓',t:'Stage 5 · Student Learning',d:'18 pilot students complete: Pre-test → AI-narrated video → Summary → Post-test → Survey.',g:true},
+    {i:'⚡',t:'Stage 4 · Module Deployment',d:'AI Curriculum Co-Pilot drafts sector-specific micro-learning. Pushed to faculty every Monday. 8 modules deployed.',g:true},
+  ];
+  const box=(b,g)=>`<div style="background:var(--surface2);border:1px solid ${g?'rgba(10,110,79,0.18)':'var(--border)'};border-radius:11px;padding:14px;cursor:default;transition:all .18s" onmouseenter="this.style.borderColor='${g?'rgba(10,110,79,0.45)':'rgba(26,79,214,0.4)'}';this.style.boxShadow='var(--sh-sm)'" onmouseleave="this.style.borderColor='${g?'rgba(10,110,79,0.18)':'var(--border)'}';this.style.boxShadow='none'"><div style="font-size:20px;margin-bottom:6px">${b.i}</div><div style="font-weight:700;font-size:12px;margin-bottom:3px;color:var(--ink)">${b.t}</div><div style="font-size:10px;color:var(--ink3);line-height:1.55">${b.d}</div></div>`;
+  document.getElementById('pipe1').innerHTML=s1.map(b=>box(b,false)).join('');
+  document.getElementById('pipe2').innerHTML=s2.map(b=>box(b,true)).join('');
+  const tl=[
+    {d:"Jan 2026",e:"JD Scraping Initiated",s:"25K+ JDs · Marketing, Finance, Logistics",done:true},
+    {d:"Feb 2026",e:"NLP Analysis Complete",s:"54 gaps · 17 clusters · 3 sector heatmaps",done:true},
+    {d:"Mar 2026",e:"All Modules Drafted",s:"8 modules across 3 sectors AI-generated",done:true},
+    {d:"Apr 2026",e:"Pilot Cohort Enrolled",s:"18 UEH students onboarded",done:true},
+    {d:"May 2026",e:"Modules Deploying",s:"Prompt Eng. & Multimedia in progress",cur:true},
+    {d:"Jun 2026",e:"Full Impact Assessment",s:"MGA comparison across all sectors",done:false},
+    {d:"Jul 2026",e:"System Scale-Up",s:"Expand to 5 more universities",done:false},
+  ];
+  document.getElementById('timeline').innerHTML=tl.map((r,i)=>{
+    const dot=r.cur?'#a05c0a':r.done?'#0a6e4f':'#d1d5db';
+    const dotBg=r.cur?'#fef3e1':r.done?'#e5f5ef':'#f3f4f6';
+    return`<div style="display:flex;gap:11px;margin-bottom:12px"><div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0"><div style="width:11px;height:11px;border-radius:50%;background:${dotBg};border:2px solid ${dot};margin-top:2px"></div>${i<tl.length-1?`<div style="width:2px;flex:1;background:var(--border);margin-top:3px"></div>`:''}</div><div style="padding-bottom:3px"><div style="font-family:var(--fm);font-size:9px;color:var(--ink3);margin-bottom:1px">${r.d}</div><div style="font-size:12px;font-weight:700;color:var(--ink)">${r.e}${r.cur?' <span style="font-size:9px;background:var(--amber-l);color:var(--amber);padding:1px 6px;border-radius:9px;font-family:var(--fm)">ACTIVE</span>':''}</div><div style="font-size:10px;color:var(--ink3)">${r.s}</div></div></div>`;
+  }).join('');
+  document.getElementById('compBody').innerHTML=[
+    ["Curriculum Update Cycle","Every 5 years (Ministry approval)","Quarterly — auto-trigger if similarity <0.60"],
+    ["Skill Gap Detection","Manual faculty review annually","Real-time NLP cosine similarity across 3 sectors"],
+    ["Market Signal Source","Industry advisory board (annual)","25,000+ JDs/day — Marketing, Finance, Logistics"],
+    ["Module Deployment","Full semester redesign (months)","4-6 week micro-patches — auto-generated per sector"],
+    ["Student Assessment","End-of-semester exams","Pre/post test per module with immediate feedback"],
+    ["Geographic Equity","Urban-rural gap unmonitored","Hanoi/HCM cohort tracking across all modules"],
+    ["Faculty Updates","Annual training workshops","AI Co-Pilot weekly push — every Monday"],
+  ].map(r=>`<tr><td style="color:var(--ink3);font-weight:600">${r[0]}</td><td style="color:var(--red)">${r[1]}</td><td style="color:var(--green)">${r[2]}</td></tr>`).join('');
+}
+
+// ═══════════════ MODULES ═══════════════
+const allMods = {
+  marketing:[
+    {id:"m0",emoji:"🤖",title:"Generative AI for Marketers",sector:"AI Content & Writing",dur:"18 min",status:"live",color:"linear-gradient(135deg,#dbeafe,#bfdbfe)",
+     vt:"Introduction to Generative AI in Marketing",vd:"Learn how LLMs like ChatGPT and Claude are transforming marketing content creation and campaign ideation.",videoId:null,
+     kp:[{n:"01",t:"What is Generative AI?",d:"LLMs, prompts, and how they generate human-like marketing content at scale."},{n:"02",t:"AI Copywriting Techniques",d:"AIDA framework prompts, tone customization, and brand voice preservation."},{n:"03",t:"Campaign Ideation with AI",d:"Brainstorm 50+ campaign concepts in minutes using ChatGPT and Claude."},{n:"04",t:"AI Hallucination Risks",d:"Identifying when AI makes factual errors — critical for marketing accuracy."}],
+     quiz:[{q:"What does 'hallucination' mean in Generative AI?",o:["AI making images","AI producing factually incorrect but confident-sounding text","A visual processing error","AI refusing to answer"],a:1},{q:"Best framework for persuasive AI copy prompts?",o:["SWOT","AIDA","BCG Matrix","PESTLE"],a:1},{q:"Claude, ChatGPT, Gemini are examples of:",o:["Vision models","Large Language Models (LLMs)","Analytics platforms","Social algorithms"],a:1},{q:"Why is prompt engineering a critical marketing skill?",o:["It replaces design","Extracts precise brand-aligned AI outputs","Only for developers","Eliminates strategy"],a:1},{q:"Most important element in an email subject-line prompt?",o:["Weather","Audience, tone, benefit, and desired action","Model version","Student name"],a:1}]},
+    {id:"m1",emoji:"📊",title:"AI Data Analytics for Marketing",sector:"AI Data Analytics",dur:"22 min",status:"live",color:"linear-gradient(135deg,#e0f2fe,#bae6fd)",
+     vt:"AI-Powered Marketing Analytics: From Data to Decisions",vd:"Discover how AI tools transform raw marketing data into actionable consumer insights.",videoId:null,
+     kp:[{n:"01",t:"Predictive Analytics",d:"AI models predict churn, LTV and purchase probability from behavioral data."},{n:"02",t:"GA4 AI Insights",d:"Built-in AI detects anomalies and opportunities automatically."},{n:"03",t:"NLP for Feedback",d:"Sentiment analysis processes thousands of reviews in real-time."},{n:"04",t:"AI Segmentation",d:"K-means and RFM segmentation for precise audience targeting."}],
+     quiz:[{q:"Predictive analytics uses past data to:",o:["Make visual reports","Forecast future customer behavior","Design layouts","Write copy"],a:1},{q:"Sentiment analysis determines:",o:["Image colors","Emotional tone in customer text","Website speed","Email rates"],a:1},{q:"RFM stands for:",o:["Revenue Frequency Market","Recency Frequency Monetary","Return Flow Management","Research Framework Method"],a:1},{q:"Most common Python library for marketing analytics?",o:["Django","Pandas + Scikit-learn","Flask","PyGame"],a:1},{q:"GA4 anomaly detection is useful because:",o:["Posts social content","Flags unusual traffic without manual monitoring","Writes blogs","Designs A/B tests"],a:1}]},
+    {id:"m2",emoji:"✏️",title:"Prompt Engineering Mastery",sector:"Prompt Engineering",dur:"15 min",status:"live",color:"linear-gradient(135deg,#ede9fe,#ddd6fe)",
+     vt:"The Art of Writing Hyper-Realistic AI Image Prompts",vd:"Master the 6-component framework for crafting hyper-realistic AI image prompts — Subject, Art Style, Lighting, Mood, Technical Specs, and Surreal Detail.",
+     videoId:"1ql22ce4gEdpCQNYIASk-IgupkFWm0knB",
+     kp:[{n:"01",t:"The 6-Component Framework",d:"Subject, Art Style, Lighting, Mood/Atmosphere, Technical Specs, and Surreal Detail — the professional prompt formula."},{n:"02",t:"Think Like a Director",d:"Golden Rule #1: Frame every image prompt like a director or painter with a clear visual vision."},{n:"03",t:"Specificity = Accuracy",d:"More specific prompts reduce ambiguity — AI controls style, mood, lighting, and composition better."},{n:"04",t:"Surreal Detail & Impact",d:"Impossible surreal elements make images more visually striking and memorable."}],
+     quiz:[{q:"What are the 6 components of a strong AI image prompt?",o:["Subject, Color, Size, Filter, Render, Font","Subject, Art Style, Lighting, Mood/Atmosphere, Technical Specs, Surreal Detail","Theme, Tone, Layout, Effect, Detail, Background","Style, Subject, Resolution, Mood, Camera, Format"],a:1},{q:"Golden Rule #1 in prompt engineering states that you should:",o:["Always use very long prompts","Think like a director or painter","Only use famous keywords","Avoid adjectives"],a:1},{q:"Why does a vague prompt produce poor AI images?",o:["AI uses less electricity","AI lacks guidance on style, mood and composition","AI only works with long prompts","Image resolution drops"],a:1},{q:"Which element is an example of 'Technical Specs'?",o:["melancholic","inspired by Dalí","8K ultra detailed, cinematic depth of field","levitating lotus petals"],a:2},{q:"A 'surreal detail' in a prompt is used to:",o:["Set the image resolution","Describe realistic textures","Add an impossible or striking visual element that makes the image memorable","Mention the artist's name"],a:2}]},
+    {id:"m3",emoji:"🎨",title:"AI Multimedia & Creative",sector:"AI Multimedia",dur:"20 min",status:"wip",color:"linear-gradient(135deg,#fce7f3,#fbcfe8)",
+     vt:"AI Creative Tools: Midjourney, DALL-E, Runway & Beyond",vd:"Master AI image generation, video creation, and creative asset production that cuts production time by 80%.",videoId:null,
+     kp:[{n:"01",t:"AI Image Generation",d:"Midjourney v6 and DALL-E 3 for campaign visuals and ad creatives."},{n:"02",t:"AI Video Production",d:"Runway Gen-3 and Sora for short-form social video content."},{n:"03",t:"Brand Consistency",d:"Style reference techniques to maintain visual brand identity."},{n:"04",t:"Legal Considerations",d:"Copyright and disclosure requirements for AI-generated visuals."}],
+     quiz:[{q:"Midjourney and DALL-E are used to:",o:["Analyze data","Generate images from text descriptions","Build websites","Track performance"],a:1},{q:"Using AI images commercially requires awareness of:",o:["Electricity cost","Copyright, disclosure and potential bias","Resolution only","Server schedules"],a:1},{q:"A 'style reference' helps marketers:",o:["Choose fonts","Maintain consistent visual brand identity","Write descriptions","Calculate ROI"],a:1},{q:"Runway Gen-3 and Sora are tools for:",o:["Data analysis","Video generation from text/image prompts","Chatbots","Email automation"],a:1},{q:"Main advantage of AI creative tools:",o:["Eliminates creativity","Reduces production time and cost while scaling output","Replaces strategy","Only for large corporations"],a:1}]},
+  ],
+  finance:[
+    {id:"f0",emoji:"🤖",title:"AutoML for Financial Analysis",sector:"AutoML & Prediction",dur:"20 min",status:"live",color:"linear-gradient(135deg,#d1fae5,#a7f3d0)",
+     vt:"AutoML in Finance: From Data to Decisions",vd:"Learn how AutoML platforms automate financial modeling, credit scoring, and risk prediction.",videoId:null,
+     kp:[{n:"01",t:"What is AutoML?",d:"Automated ML that selects, trains and optimizes financial prediction models."},{n:"02",t:"Credit Scoring",d:"Using AutoML to build credit risk models from customer financial behavior."},{n:"03",t:"Fraud Detection",d:"Real-time anomaly detection in transactions using automated AI pipelines."},{n:"04",t:"Regulatory Compliance",d:"Explainable AI requirements for financial models under Vietnamese banking law."}],
+     quiz:[{q:"AutoML in finance primarily automates:",o:["Report formatting","Model selection, training and optimization","Client meetings","Data entry"],a:1},{q:"Credit scoring with AutoML uses:",o:["Social media posts","Customer financial behavior and history","Weather data","Competitor info"],a:1},{q:"Explainable AI in banking is important because:",o:["It looks professional","Regulators require understanding of how decisions are made","It is faster","It costs less"],a:1},{q:"Fraud detection AI works by:",o:["Manual review","Real-time anomaly detection in transaction patterns","Weekly reports","Customer surveys"],a:1},{q:"Main advantage of AutoML for finance students:",o:["No computers needed","Enables non-coders to build high-quality prediction models","Only works offline","Requires PhD"],a:1}]},
+    {id:"f1",emoji:"🧠",title:"LLM & NLP for Finance",sector:"LLM Applications",dur:"18 min",status:"live",color:"linear-gradient(135deg,#e0e7ff,#c7d2fe)",
+     vt:"LLMs in Financial Services: Applications & Risks",vd:"Discover how LLMs transform financial document analysis, report generation and customer communication.",videoId:null,
+     kp:[{n:"01",t:"LLM for Documents",d:"Processing contracts, annual reports and regulatory filings at scale."},{n:"02",t:"AI Financial Writing",d:"Generating investment summaries, ESG reports and client communications."},{n:"03",t:"Sentiment for Markets",d:"NLP to analyze news sentiment and predict market movements."},{n:"04",t:"LLM Risks in Finance",d:"Hallucination, confidentiality, and compliance risks in banking contexts."}],
+     quiz:[{q:"LLMs in finance are most useful for:",o:["Physical cash handling","Processing large volumes of financial documents and text","Building ATMs","Network security"],a:1},{q:"NLP sentiment analysis in finance helps:",o:["Design bank branches","Predict market movements from news and social media","Train staff","Count money"],a:1},{q:"The biggest risk of using LLMs for financial reports:",o:["Slow typing speed","Hallucination — generating plausible but incorrect financial data","High electricity cost","Small fonts"],a:1},{q:"AI-generated financial writing requires:",o:["No review","Human expert verification before publication or submission","Only spell-checking","Translation only"],a:1},{q:"LLM document analysis saves time by:",o:["Printing faster","Processing hundreds of contracts and reports simultaneously","Reducing meetings","Automating coffee"],a:1}]},
+  ],
+  logistics:[
+    {id:"l0",emoji:"🚚",title:"AI Route & Logistics Optimization",sector:"AI Route & Logistics",dur:"22 min",status:"live",color:"linear-gradient(135deg,#fef3c7,#fde68a)",
+     vt:"AI-Powered Logistics Optimization",vd:"Master AI tools that optimize delivery routes, predict demand, and automate supply chain decisions.",videoId:null,
+     kp:[{n:"01",t:"Route Optimization AI",d:"Google OR-Tools and commercial AI platforms for last-mile delivery."},{n:"02",t:"Demand Forecasting",d:"LSTM models predicting supply chain demand 30–90 days ahead."},{n:"03",t:"Warehouse Automation",d:"Computer vision and RPA in modern warehouses."},{n:"04",t:"Real-time Tracking",d:"IoT + AI integration for live shipment monitoring."}],
+     quiz:[{q:"AI route optimization primarily aims to:",o:["Design packaging","Reduce delivery time and fuel costs through optimal path planning","Train drivers","Build warehouses"],a:1},{q:"Demand forecasting with LSTM helps supply chains:",o:["Design logos","Predict future inventory needs and avoid stockouts","Count employees","Create invoices"],a:1},{q:"Computer vision in warehouses is used for:",o:["Video surveillance only","Automated product sorting, quality checking and inventory tracking","Staff monitoring","Office security"],a:1},{q:"IoT + AI in logistics enables:",o:["Faster printing","Real-time tracking and proactive exception management of shipments","Better meetings","Email automation"],a:1},{q:"Main competitive advantage of AI route optimization:",o:["Better maps","Significant reduction in fuel costs and delivery time at scale","Larger trucks","More drivers"],a:1}]},
+    {id:"l1",emoji:"📄",title:"GenAI for Supply Chain Documents",sector:"GenAI Document Tools",dur:"16 min",status:"live",color:"linear-gradient(135deg,#dcfce7,#bbf7d0)",
+     vt:"Generative AI for Logistics Documents",vd:"Automate contracts, customs documents, supplier communications and compliance reports using GenAI.",videoId:null,
+     kp:[{n:"01",t:"Contract Automation",d:"LLMs to draft, review and flag risks in supplier contracts automatically."},{n:"02",t:"Customs Documentation",d:"AI tools for generating accurate customs declarations and trade compliance docs."},{n:"03",t:"Multilingual Communication",d:"Real-time AI translation for supplier and client communications across 15+ languages."},{n:"04",t:"Compliance Reporting",d:"Automated ESG and regulatory compliance reports from supply chain data."}],
+     quiz:[{q:"GenAI for supply chain contracts helps by:",o:["Signing automatically","Drafting and reviewing contracts faster with AI assistance","Mailing contracts","Filing only"],a:1},{q:"Multilingual AI in logistics is important because:",o:["It sounds modern","Supply chains involve suppliers across many countries and languages","It is required by law","Only for large companies"],a:1},{q:"AI customs documentation tools help by:",o:["Designing shipping labels","Generating accurate compliance documents and reducing declaration errors","Tracking packages","Hiring customs agents"],a:1},{q:"Automated compliance reporting saves:",o:["Office space","Significant time compiling regulatory and ESG data","Travel costs","Meeting rooms"],a:1},{q:"Main risk of AI-generated logistics documents:",o:["Too many pages","Errors requiring human expert verification","Wrong fonts","Incorrect colors"],a:1}]},
+  ]
+};
+
+function switchModSector(s){
+  curModSector=s;
+  ['marketing','finance','logistics'].forEach(k=>{
+    const el=document.getElementById('mtab-'+k);
+    if(el)el.className='stab'+(s===k?' '+(k==='marketing'?'st-b':k==='finance'?'st-g':'st-a'):'');
+  });
+  closeMod();buildModGrid();
+}
+function buildModGrid(){
+  document.getElementById('modGrid').innerHTML=allMods[curModSector].map(m=>`<div class="mod-card" id="mc-${m.id}" onclick="openMod('${m.id}')"><div class="mod-thumb" style="background:${m.color}"><span style="font-size:24px;position:relative;z-index:1">${m.emoji}</span></div><div class="mod-body"><div class="mod-sector">${m.sector}</div><div class="mod-title">${m.title}</div><div class="mod-meta">${m.dur}</div><div class="mod-status ${m.status==='live'?'ms-live':'ms-wip'}">${m.status==='live'?'LIVE':'IN PROGRESS'}</div></div></div>`).join('');
+}
+function findMod(id){for(const s of Object.values(allMods)){const m=s.find(x=>x.id===id);if(m)return m;}return null;}
+function openMod(id){
+  curMod=findMod(id);
+  document.querySelectorAll('.mod-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById('mc-'+id)?.classList.add('active');
+  qzState={q:0,ans:[],started:false,done:false,isPre:true,preScore:qzState.preScore};
+  svState={answers:{},submitted:false};curTab='video';
+  renderMod();
+  document.getElementById('mod-detail').classList.add('vis');
+  setTimeout(()=>document.getElementById('modDetailBox').scrollIntoView({behavior:'smooth',block:'start'}),80);
+}
+function closeMod(){document.getElementById('mod-detail').classList.remove('vis');document.querySelectorAll('.mod-card').forEach(c=>c.classList.remove('active'));}
+
+function renderMod(){
+  const m=curMod;if(!m)return;
+  document.getElementById('modDetailBox').innerHTML=`
+  <div class="mod-det-hdr">
+    <div>
+      <div style="font-size:24px;margin-bottom:7px">${m.emoji}</div>
+      <div style="font-family:var(--fm);font-size:9px;color:var(--green);letter-spacing:0.12em;margin-bottom:4px;text-transform:uppercase">${m.sector}</div>
+      <div style="font-family:var(--fd);font-size:19px;margin-bottom:6px;color:var(--ink)">${m.title}</div>
+      <div style="display:flex;gap:7px;align-items:center">
+        <div class="mod-status ${m.status==='live'?'ms-live':'ms-wip'}">${m.status==='live'?'LIVE':'IN PROGRESS'}</div>
+        <span style="font-size:11px;color:var(--ink3)">${m.dur}</span>
+      </div>
+    </div>
+    <button class="close-x" onclick="closeMod()">✕</button>
+  </div>
+  <div class="mod-det-body">
+    <div class="det-tabs">
+      <button class="det-tab ${curTab==='video'?'active':''}" onclick="swTab('video')">Video</button>
+      <button class="det-tab ${curTab==='summary'?'active':''}" onclick="swTab('summary')">Key Takeaways</button>
+      <button class="det-tab ${curTab==='quiz'?'active':''}" onclick="swTab('quiz')">Quiz</button>
+      <button class="det-tab ${curTab==='survey'?'active':''}" onclick="swTab('survey')">Survey</button>
+    </div>
+    <div id="tp-video" class="tab-pane ${curTab==='video'?'active':''}">${tVideo(m)}</div>
+    <div id="tp-summary" class="tab-pane ${curTab==='summary'?'active':''}">${tSummary(m)}</div>
+    <div id="tp-quiz" class="tab-pane ${curTab==='quiz'?'active':''}">${tQuiz(m)}</div>
+    <div id="tp-survey" class="tab-pane ${curTab==='survey'?'active':''}">${tSurvey(m)}</div>
+  </div>`;
+}
+
+function tVideo(m){
+  let v='';
+  if(m.videoId){
+    v=`<div class="vid-container"><iframe src="https://drive.google.com/file/d/${m.videoId}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`;
+  } else {
+    v=`<div class="vid-placeholder"><button class="play-btn" onclick="handlePlay(this)">▶</button><div style="margin-top:12px;text-align:center"><div style="font-family:var(--fd);font-size:14px;color:var(--ink)">${m.vt}</div><div style="font-size:10px;color:var(--ink3);margin-top:3px">AI-narrated · ${m.dur} · ${m.sector}</div></div></div>`;
+  }
+  return`${v}
+  <div style="display:flex;gap:12px;padding:8px 13px;background:var(--surface2);border-radius:8px;font-size:10px;color:var(--ink3);margin-bottom:12px;border:1px solid var(--border)">
+    <span style="color:var(--blue)">${m.videoId?'Google Drive Video':'AI-Narrated'}</span>
+    <span>${m.dur}</span><span>VAIL Level 2</span>
+  </div>
+  <div style="background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:12px;border:1px solid var(--border)">
+    <div style="font-size:12px;font-weight:700;margin-bottom:4px;color:var(--ink)">About this module</div>
+    <p style="font-size:11px;color:var(--ink3);line-height:1.7">${m.vd}</p>
+  </div>
+  <div style="display:flex;gap:7px">
+    <button class="btn btn-primary btn-sm" onclick="swTab('summary')">Key Takeaways →</button>
+    <button class="btn btn-secondary btn-sm" onclick="swTab('quiz')">Skip to Quiz</button>
+  </div>`;
+}
+function tSummary(m){
+  return`<div class="kn-grid">${m.kp.map(k=>`<div class="kn-card"><div class="kn-num">${k.n}</div><div class="kn-title">${k.t}</div><div class="kn-desc">${k.d}</div></div>`).join('')}</div>
+  <div style="background:var(--blue-l);border-radius:9px;padding:13px;margin-bottom:12px;border:1px solid rgba(26,79,214,0.14)">
+    <div style="font-size:11px;font-weight:700;margin-bottom:6px;color:var(--blue)">Learning Objectives</div>
+    <div style="font-size:10px;color:var(--ink3);line-height:2">
+      ✓ Explain core concepts of ${m.sector} in a professional context<br>
+      ✓ Apply AI tools to practical real-world scenarios<br>
+      ✓ Critically evaluate AI outputs for accuracy and quality<br>
+      ✓ Achieve VAIL Level 2 — Operational proficiency
+    </div>
+  </div>
+  <button class="btn btn-primary btn-sm" onclick="swTab('quiz')">Start Quiz →</button>`;
+}
+function tQuiz(m){
+  if(!qzState.started){
+    return`<div style="text-align:center;padding:28px 20px">
+      <div style="font-size:34px;margin-bottom:10px">✅</div>
+      <div style="font-family:var(--fd);font-size:18px;margin-bottom:5px;color:var(--ink)">Knowledge Check</div>
+      <p style="color:var(--ink3);margin-bottom:16px;max-width:360px;margin-left:auto;margin-right:auto;font-size:12px;line-height:1.65">${m.quiz.length} questions on ${m.sector}. Take the Pre-Quiz before watching, or Post-Quiz after.</p>
+      <div style="display:flex;gap:8px;justify-content:center">
+        <button class="btn btn-primary btn-sm" onclick="startQz()">Pre-Quiz</button>
+        <button class="btn btn-green btn-sm" onclick="startPostQz()">Post-Quiz</button>
+      </div></div>`;
+  }
+  if(qzState.done){
+    const sc=qzState.ans.filter((a,i)=>a===m.quiz[i].a).length;
+    const pct=Math.round(sc/m.quiz.length*100);
+    if(qzState.isPre)qzState.preScore=pct;
+    const imp=(!qzState.isPre&&qzState.preScore!=null)?`<div style="background:var(--green-l);border:1px solid rgba(10,110,79,0.2);border-radius:9px;padding:12px;margin-bottom:13px"><div style="font-size:11px;font-weight:700;color:var(--green)">Improvement</div><div style="font-family:var(--fd);font-size:24px;color:var(--green)">+${pct-qzState.preScore}pp</div><div style="font-size:10px;color:var(--ink3)">Pre: ${qzState.preScore}% → Post: ${pct}%</div></div>`:'';
+    return`<div class="quiz-result">
+      <div style="font-size:11px;color:var(--ink3);margin-bottom:2px">${qzState.isPre?'Pre-Quiz':'Post-Quiz'} Result</div>
+      <div class="q-score">${pct}%</div>
+      <div style="color:var(--ink3);margin-bottom:13px;font-size:12px">${sc} / ${m.quiz.length} correct</div>
+      ${imp}
+      <div style="display:flex;gap:7px;justify-content:center">
+        <button class="btn btn-secondary btn-sm" onclick="resetQz()">Retake</button>
+        <button class="btn btn-primary btn-sm" onclick="swTab('survey')">Survey →</button>
+      </div></div>`;
+  }
+  const q=m.quiz[qzState.q];
+  return`<div style="display:flex;gap:3px;margin-bottom:14px">${m.quiz.map((_,i)=>`<div style="height:3px;flex:1;border-radius:2px;background:${i<qzState.q?'#0a6e4f':i===qzState.q?'#1a4fd6':'#e9e6de'}"></div>`).join('')}</div>
+  <div style="font-family:var(--fm);font-size:9px;color:var(--ink3);margin-bottom:8px">Q${qzState.q+1}/${m.quiz.length} · ${qzState.isPre?'PRE-QUIZ':'POST-QUIZ'}</div>
+  <div class="q-card"><div class="q-text">${q.q}</div>${q.o.map((o,i)=>`<button class="opt-btn" onclick="selModAns(${i})"><span class="opt-letter">${['A','B','C','D'][i]}</span>${o}</button>`).join('')}</div>
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <button class="btn btn-secondary btn-sm" onclick="resetQz()">Reset</button>
+    <span style="font-size:10px;color:var(--ink4)">Select an option to continue</span>
+  </div>`;
+}
+function tSurvey(m){
+  if(svState.submitted){
+    return`<div style="text-align:center;padding:22px;background:var(--surface2);border-radius:13px;border:1px solid var(--border)">
+      <div style="font-family:var(--fd);font-size:17px;margin-bottom:3px;color:var(--ink)">Cohort Aggregate Results</div>
+      <p style="color:var(--ink3);font-size:11px;margin-bottom:18px">Based on 18 pilot students · Prompt Engineering module</p>
+      <div style="display:flex;justify-content:center;gap:26px;margin-bottom:18px">
+        <div><div style="font-size:10px;color:var(--ink3)">PRE-TEST</div><div style="font-family:var(--fd);font-size:36px;color:var(--red)">44%</div></div>
+        <div style="align-self:center;font-size:16px;color:var(--ink4)">→</div>
+        <div><div style="font-size:10px;color:var(--ink3)">POST-TEST</div><div style="font-family:var(--fd);font-size:36px;color:var(--green)">93%</div></div>
+        <div><div style="font-size:10px;color:var(--ink3)">GAIN</div><div style="font-family:var(--fd);font-size:36px;color:var(--blue)">+49pp</div></div>
+      </div></div>`;
+  }
+  const qs=[{id:'conf',q:`How confident are you now in applying prompt engineering skills?`},{id:'rel',q:'How relevant is this module to the 2026 job market?'},{id:'rec',q:'How likely are you to recommend this module to classmates?'}];
+  const sc=['1\nStrongly\nDisagree','2','3\nNeutral','4','5\nStrongly\nAgree'];
+  let h=`<div style="margin-bottom:14px"><div style="font-family:var(--fd);font-size:16px;margin-bottom:3px;color:var(--ink)">Post-Module Survey</div><p style="color:var(--ink3);font-size:11px">Your feedback helps improve the VAIL system.</p></div>`;
+  qs.forEach(q=>{h+=`<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--ink)">${q.q}</div><div class="likert">${sc.map((s,i)=>`<button class="lk-btn ${svState.answers[q.id]===i+1?'sel':''}" onclick="svSel('${q.id}',${i+1})">${s}</button>`).join('')}</div></div>`;});
+  h+=`<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--ink)">Did your syllabus prepare you for AI roles?</div><div style="display:flex;gap:6px">${['Yes','No','Partially'].map(v=>`<button class="lk-btn ${svState.answers.prep===v?'sel':''}" style="flex:0;padding:7px 14px;white-space:nowrap" onclick="svSel('prep','${v}')">${v}</button>`).join('')}</div></div>`;
+  h+=`<button class="btn btn-green btn-sm" onclick="submitSv()">Submit & See Results →</button>`;
+  return h;
+}
+function startQz(){qzState={q:0,ans:[],started:true,done:false,isPre:true,preScore:qzState.preScore};renderMod();swTab('quiz');}
+function startPostQz(){qzState={q:0,ans:[],started:true,done:false,isPre:false,preScore:qzState.preScore};renderMod();swTab('quiz');}
+function resetQz(){qzState={q:0,ans:[],started:false,done:false,isPre:true,preScore:qzState.preScore};renderMod();swTab('quiz');}
+function selModAns(idx){
+  const m=curMod;
+  qzState.ans.push(idx);
+  const bs=document.querySelectorAll('.opt-btn');
+  bs.forEach(b=>b.disabled=true);
+  bs[idx].classList.add(idx===m.quiz[qzState.q].a?'correct':'wrong');
+  if(idx!==m.quiz[qzState.q].a)bs[m.quiz[qzState.q].a].classList.add('correct');
+  setTimeout(()=>{qzState.q++;if(qzState.q>=m.quiz.length)qzState.done=true;renderMod();swTab('quiz');},900);
+}
+function svSel(id,v){svState.answers[id]=v;renderMod();swTab('survey');}
+function submitSv(){svState.submitted=true;renderMod();swTab('survey');}
+function swTab(t){
+  curTab=t;
+  document.querySelectorAll('.det-tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(x=>x.classList.remove('active'));
+  const btn=document.querySelector(`.det-tab[onclick="swTab('${t}')"]`);
+  if(btn)btn.classList.add('active');
+  const pane=document.getElementById('tp-'+t);
+  if(pane)pane.classList.add('active');
+}
+function handlePlay(btn){btn.textContent='⏸';btn.style.background='var(--green)';setTimeout(()=>{btn.textContent='▶';btn.style.background='';},3000);}
+
+// ═══════════════ PRE/POST TESTS ═══════════════
+function switchTest(t){
+  curTest=t;
+  ['pre','post','results'].forEach(k=>{
+    const el=document.getElementById('ttab-'+k);
+    if(el)el.className='stab'+(t===k?' st-b':'');
+  });
+  renderTest();
+}
+function renderTest(){
+  const el=document.getElementById('testContent');
+  if(curTest==='pre')el.innerHTML=renderPreTest();
+  else if(curTest==='post')el.innerHTML=renderPostTest();
+  else{el.innerHTML=renderTestResults();setTimeout(initResultCharts,100);}
+}
+
+function renderPreTest(){
+  const answered=Object.keys(preState.answers).length;
+  const total=preTest.length;
+  const allAnswered=answered===total;
+  let h=`<div class="test-wrap">
+  <div class="test-hdr">
+    <div style="font-family:var(--fd);font-size:22px;color:var(--ink);margin-bottom:5px">Pre-Test — AI Image Generation & Prompt Engineering</div>
+    <p style="color:var(--ink3);font-size:12px;line-height:1.65">Establishes student baseline knowledge before the Prompt Engineering module. 13 multiple-choice questions. Answer all questions, then click <strong>Reveal Answers</strong> to review with explanations.</p>
+    <div class="test-meta-row">
+      <div class="tmi">Duration: <b>20–25 min</b></div>
+      <div class="tmi">Format: <b>13 × MCQ</b></div>
+      <div class="tmi">Purpose: <b>Baseline measurement</b></div>
+      <div class="tmi">Max Score: <b>13/13</b></div>
+    </div>
+  </div>
+  <div class="tprog">
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ink3)"><span>Progress</span><span>${answered} / ${total} answered</span></div>
+    <div class="prog-track"><div class="prog-fill" style="width:${Math.round(answered/total*100)}%"></div></div>
+  </div>
+  <div class="sec-label">PART A — KNOWLEDGE & APPLICATION · 13 Questions</div>`;
+
+  preTest.forEach((q,i)=>{
+    const chosen=preState.answers[i];
+    const rev=preState.revealed;
+    h+=`<div class="tq"><div class="tq-num">QUESTION ${i+1} OF ${total}</div><div class="tq-text">${q.q}</div>`;
+    q.opts.forEach((o,j)=>{
+      let cls='topt';
+      const isChosen=chosen===j;
+      const isCorrect=j===q.ans;
+      if(rev){
+        if(isCorrect)cls+=' rev-correct';
+        else if(isChosen&&!isCorrect)cls+=' wrong';
+      } else {
+        if(isChosen)cls+=' selected';
+      }
+      const dis=(chosen!==undefined&&!rev)||rev?'disabled':'';
+      h+=`<button class="${cls}" ${dis} onclick="selectPreAns(${i},${j})"><span class="opt-key">${['A','B','C','D'][j]}</span>${o}</button>`;
+    });
+    if(rev&&chosen!==undefined){
+      const correct=chosen===q.ans;
+      h+=`<div class="ans-explanation ${correct?'ans-correct':'ans-wrong'}">
+        <strong>${correct?'✓ Correct':'✗ Incorrect — Correct answer: '+(q.ans===0?'A':q.ans===1?'B':q.ans===2?'C':'D')}</strong><br>
+        ${q.expl}
+      </div>`;
+    }
+    h+=`</div>`;
+  });
+
+  if(!preState.revealed){
+    h+=`<button class="show-ans-btn" ${allAnswered?'':'disabled'} onclick="revealPreAnswers()">${allAnswered?'✓ Reveal Answers & Explanations':'Answer all '+(total-answered)+' remaining question'+(total-answered!==1?'s':'')+' to unlock'}</button>`;
+  } else {
+    const score=preTest.filter((_,i)=>preState.answers[i]===preTest[i].ans).length;
+    h+=`<div class="score-display"><div style="font-size:12px;color:rgba(255,255,255,0.75);margin-bottom:3px">Your Pre-Test Score</div><div class="score-big">${score}/13</div><div style="font-size:14px;color:rgba(255,255,255,0.9);margin-top:2px">${Math.round(score/total*100)}% · Cohort avg: 44% (5.7/13)</div></div>
+    <button class="btn btn-secondary btn-sm" style="margin-top:12px" onclick="switchTest('post')">Proceed to Post-Test →</button>`;
+  }
+  h+='</div>';
+  return h;
+}
+
+function selectPreAns(qi,oi){
+  if(preState.revealed)return;
+  if(preState.answers[qi]!==undefined)return; // locked once answered
+  preState.answers[qi]=oi;
+  renderTest();
+}
+function revealPreAnswers(){
+  if(Object.keys(preState.answers).length<preTest.length)return;
+  preState.revealed=true;renderTest();
+}
+
+function renderPostTest(){
+  const answeredA=Object.keys(postAState.answers).length;
+  const totalA=postTestA.length;
+  const allAnswered=answeredA===totalA;
+  let h=`<div class="test-wrap">
+  <div class="test-hdr">
+    <div style="font-family:var(--fd);font-size:22px;color:var(--ink);margin-bottom:5px">Post-Test — The Art of Writing Hyper-Realistic AI Image Prompts</div>
+    <p style="color:var(--ink3);font-size:12px;line-height:1.65">Validates module impact after completing the Prompt Engineering video. Part A: 10 MCQ. Part B: 3 practical writing exercises graded by rubric. Answer all Part A questions first, then reveal answers.</p>
+    <div class="test-meta-row">
+      <div class="tmi">Duration: <b>25–35 min</b></div>
+      <div class="tmi">Format: <b>Part A (10 MCQ) + Part B (3 exercises)</b></div>
+      <div class="tmi">Total: <b>30 points</b></div>
+      <div class="tmi">Framework: <b>6-Component Prompt</b></div>
+    </div>
+  </div>
+  <div class="tprog">
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ink3)"><span>Part A Progress</span><span>${answeredA} / ${totalA} answered</span></div>
+    <div class="prog-track"><div class="prog-fill" style="width:${Math.round(answeredA/totalA*100)}%"></div></div>
+  </div>
+  <div class="sec-label">PART A — KNOWLEDGE QUIZ · 10 Questions · 10 Points</div>`;
+
+  postTestA.forEach((q,i)=>{
+    const chosen=postAState.answers[i];
+    const rev=postAState.revealed;
+    h+=`<div class="tq"><div class="tq-num">QUESTION ${i+1} OF ${totalA} · PART A</div><div class="tq-text">${q.q}</div>`;
+    q.opts.forEach((o,j)=>{
+      let cls='topt';
+      if(rev){
+        if(j===q.ans)cls+=' rev-correct';
+        else if(j===chosen&&chosen!==q.ans)cls+=' wrong';
+      } else if(chosen===j)cls+=' selected';
+      const dis=(chosen!==undefined&&!rev)||rev?'disabled':'';
+      h+=`<button class="${cls}" ${dis} onclick="selectPostAns(${i},${j})"><span class="opt-key">${['A','B','C','D'][j]}</span>${o}</button>`;
+    });
+    if(rev&&chosen!==undefined){
+      const correct=chosen===q.ans;
+      h+=`<div class="ans-explanation ${correct?'ans-correct':'ans-wrong'}">
+        <strong>${correct?'✓ Correct':'✗ Incorrect — Correct answer: '+(q.ans===0?'A':q.ans===1?'B':q.ans===2?'C':'D')}</strong><br>
+        ${q.expl}
+      </div>`;
+    }
+    h+=`</div>`;
+  });
+
+  if(!postAState.revealed){
+    h+=`<button class="show-ans-btn" ${allAnswered?'':'disabled'} onclick="revealPostAnswers()">${allAnswered?'✓ Reveal Part A Answers & Explanations':'Answer all '+(totalA-answeredA)+' remaining Part A question'+(totalA-answeredA!==1?'s':'')+' to unlock'}</button>`;
+  } else {
+    const score=postTestA.filter((_,i)=>postAState.answers[i]===postTestA[i].ans).length;
+    h+=`<div style="background:var(--blue-l);border:1px solid rgba(26,79,214,0.2);border-radius:11px;padding:14px;margin:14px 0;display:flex;align-items:center;gap:14px">
+      <div style="font-family:var(--fd);font-size:30px;color:var(--blue)">${Math.round(score/totalA*100)}%</div>
+      <div><div style="font-weight:700;font-size:12px">Part A Score — ${score}/10 correct</div><div style="font-size:10px;color:var(--ink3)">Cohort avg Part A: 8.9/10 (89%)</div></div>
+    </div>`;
+  }
+
+  h+=`<div class="sec-label" style="margin-top:26px">PART B — PRACTICAL APPLICATION · 3 Exercises · 20 Points</div>`;
+  postTestB.forEach(ex=>{
+    h+=`<div class="test-ex"><div class="ex-title">${ex.title}</div><div class="ex-pts">${ex.pts} points</div>`;
+    if(ex.prompt)h+=`<div style="font-size:11px;color:var(--ink3);margin-bottom:5px">Current prompt:</div><div class="ex-prompt">${ex.prompt}</div>`;
+    h+=`<div style="font-size:11px;color:var(--ink2);margin-bottom:10px;white-space:pre-line;line-height:1.7">${ex.task}</div>`;
+    h+=`<textarea style="width:100%;min-height:80px;padding:10px 13px;border-radius:var(--r8);border:1px solid var(--border);background:var(--surface2);font-family:var(--fb);font-size:12px;resize:vertical;color:var(--ink)" placeholder="Write your answer here..."></textarea>`;
+    if(ex.isAnalysis){
+      h+=`<div style="margin-top:11px"><div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:7px">Grading Table — Identify each component:</div>
+      <table class="rubric-table"><thead><tr><th>Component</th><th>Your Answer</th><th>Answer Key</th><th>Pts</th></tr></thead><tbody>`;
+      ex.rubric.forEach(r=>{h+=`<tr><td style="color:var(--green);font-weight:700">${r[0]}</td><td><input type="text" style="width:100%;padding:4px 7px;border-radius:5px;border:1px solid var(--border);background:var(--bg);font-family:var(--fb);font-size:11px" placeholder="..."></td><td style="font-size:10px;color:var(--ink3);font-style:italic">${r[1]}</td><td>1</td></tr>`;});
+      h+=`</tbody></table>`;
+    } else {
+      h+=`<div style="margin-top:12px"><div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:7px">Grading Rubric:</div>
+      <table class="rubric-table"><thead><tr><th>Criteria</th><th>Points</th></tr></thead><tbody>`;
+      ex.rubric.forEach(r=>{h+=`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`;});
+      h+=`</tbody></table>`;
+    }
+    if(ex.example){
+      h+=`<details style="margin-top:11px"><summary style="font-size:11px;font-weight:700;color:var(--green);cursor:pointer;user-select:none">View Example Strong Response</summary>
+      <div style="margin-top:7px;background:var(--green-l);border:1px solid rgba(10,110,79,0.2);border-radius:8px;padding:11px">
+        <div style="font-size:11px;color:var(--ink3);font-style:italic;line-height:1.7">${ex.example}</div>
+      </div></details>`;
+    }
+    h+=`</div>`;
+  });
+
+  h+=`<div class="score-display" style="margin-top:18px"><div style="font-size:12px;color:rgba(255,255,255,0.8);margin-bottom:3px">Post-Test Cohort Average</div><div class="score-big">93%</div><div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:3px">After module · n=18 · avg 27.9/30 · +49pp from Pre-Test</div></div>
+  </div>`;
+  return h;
+}
+
+function selectPostAns(qi,oi){
+  if(postAState.revealed)return;
+  if(postAState.answers[qi]!==undefined)return;
+  postAState.answers[qi]=oi;renderTest();
+}
+function revealPostAnswers(){
+  if(Object.keys(postAState.answers).length<postTestA.length)return;
+  postAState.revealed=true;renderTest();
+}
+
+function renderTestResults(){
+  return`<div class="test-wrap">
+  <div class="test-hdr">
+    <div style="font-family:var(--fd);font-size:22px;color:var(--ink);margin-bottom:5px">Assessment Results Dashboard</div>
+    <p style="color:var(--ink3);font-size:12px">Aggregate impact analysis across all 18 pilot students — actual data from pre/post test responses.</p>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card sc-r"><div class="s-lbl">Pre-Test Avg</div><div class="s-val sv-r">44%</div><div class="s-sub">5.7/13 avg · before module</div></div>
+    <div class="stat-card sc-g"><div class="s-lbl">Post-Test Avg</div><div class="s-val sv-g">93%</div><div class="s-sub">27.9/30 avg · after module</div></div>
+    <div class="stat-card sc-b"><div class="s-lbl">Avg Improvement</div><div class="s-val sv-b">+49pp</div><div class="s-sub">+111% relative gain</div></div>
+    <div class="stat-card sc-a"><div class="s-lbl">Top Score</div><div class="s-val sv-a">100%</div><div class="s-sub">6 students · 30/30</div></div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-h"><div class="card-title">Pre vs Post by Student</div><div class="ctag ct-g">VALIDATED · n=18</div></div>
+      <canvas id="resultBar" height="220"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-h"><div class="card-title">Geographic Comparison</div><div class="ctag ct-v">EQUITY</div></div>
+      <canvas id="mgaResult" height="220"></canvas>
+    </div>
+  </div>
+  <div style="background:var(--green-l);border:1px solid rgba(10,110,79,0.2);border-radius:13px;padding:16px">
+    <div style="font-weight:700;color:var(--green);margin-bottom:5px">Key Finding — Pre/Post Validation</div>
+    <div style="font-size:12px;color:var(--ink3);line-height:1.7">The Prompt Engineering module produced an average gain of <strong>+49 percentage points</strong> across 18 pilot students (from 44% to 93%). 6 students achieved a perfect score of 30/30. The module was equally effective across geographic cohorts — Hanoi students gained +53pp while HCM/Other gained +46pp — validating the VAIL adaptive framework.</div>
+  </div>
+  </div>`;
+}
+function initResultCharts(){
+  const ctx1=document.getElementById('resultBar');
+  const ctx2=document.getElementById('mgaResult');
+  if(ctx1){
+    new Chart(ctx1,{type:'bar',data:{
+      labels:STUDENTS.map(s=>s.name.split(' ').pop()),
+      datasets:[{label:'Pre %',data:STUDENTS.map(s=>s.pre),backgroundColor:'rgba(194,48,48,0.55)',borderRadius:4,borderSkipped:false},{label:'Post %',data:STUDENTS.map(s=>s.post),backgroundColor:STUDENTS.map(s=>s.city==='Hanoi'?'rgba(26,79,214,0.78)':'rgba(10,110,79,0.78)'),borderRadius:4,borderSkipped:false}]
+    },options:{responsive:true,plugins:{legend:{labels:{font:{family:"'Plus Jakarta Sans',sans-serif",size:10},color:'#7a808f'}},tooltip:{callbacks:{afterTitle:ctx=>{const s=STUDENTS[ctx[0].dataIndex];return`${s.name} · ${s.email}`;}}}},scales:{y:{max:105,min:0,ticks:{font:{family:"'Fira Code',monospace",size:9},color:'#b0b6c3'},grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{font:{family:"'Plus Jakarta Sans',sans-serif",size:9},color:'#7a808f',maxRotation:45},grid:{display:false}}}}});
+  }
+  if(ctx2){
+    const hanoi=STUDENTS.filter(s=>s.city==='Hanoi');
+    const other=STUDENTS.filter(s=>s.city!=='Hanoi');
+    const ap=g=>Math.round(g.reduce((a,s)=>a+s.pre,0)/g.length);
+    const apo=g=>Math.round(g.reduce((a,s)=>a+s.post,0)/g.length);
+    new Chart(ctx2,{type:'bar',data:{
+      labels:['Hanoi (n=7)','HCM/Other (n=11)'],
+      datasets:[{label:'Pre Avg %',data:[ap(hanoi),ap(other)],backgroundColor:['rgba(194,48,48,0.65)','rgba(194,48,48,0.65)'],borderRadius:6},{label:'Post Avg %',data:[apo(hanoi),apo(other)],backgroundColor:['rgba(26,79,214,0.78)','rgba(10,110,79,0.78)'],borderRadius:6}]
+    },options:{responsive:true,plugins:{legend:{labels:{font:{family:"'Plus Jakarta Sans',sans-serif",size:11},color:'#7a808f'}}},scales:{y:{max:105,min:0,ticks:{font:{family:"'Fira Code',monospace",size:9},color:'#b0b6c3'},grid:{color:'rgba(0,0,0,0.05)'}},x:{grid:{display:false},ticks:{font:{family:"'Plus Jakarta Sans',sans-serif",size:12},color:'#3d4150'}}}}});
+  }
+}
+
+// ═══════════════ PILOT / STUDENT TABLE ═══════════════
+function buildStudentTable(){
+  const tbody=document.getElementById('stuBody');
+  if(!tbody)return;
+  const colors={Hanoi:'#1a4fd6','Ho Chi Minh City':'#0a6e4f','Dong Nai':'#a05c0a'};
+  tbody.innerHTML=STUDENTS.map((s,i)=>{
+    const gain=s.post-s.pre;
+    const c=colors[s.city]||'#5b2aa8';
+    const initials=s.name.split(' ').slice(-2).map(w=>w[0]).join('');
+    return`<tr>
+      <td style="color:var(--ink3);font-family:var(--fm)">${i+1}</td>
+      <td><div style="display:flex;align-items:center;gap:8px">
+        <div class="stu-av" style="background:${c}1a;color:${c}">${initials}</div>
+        <div><div style="font-weight:700;font-size:12px">${s.name}</div></div>
+      </div></td>
+      <td style="font-family:var(--fm);font-size:10px;color:var(--ink3)">${s.email}</td>
+      <td><span style="font-size:11px;color:${c};font-weight:600">${s.city}</span></td>
+      <td style="text-align:center;font-family:var(--fm);font-size:12px;color:var(--red);font-weight:700">${s.preRaw}/13</td>
+      <td style="text-align:center;font-family:var(--fm);font-size:12px;color:var(--green);font-weight:700">${s.postRaw}/30</td>
+      <td style="text-align:center;font-family:var(--fm);font-size:12px;color:var(--red)">${s.pre}%</td>
+      <td style="text-align:center;font-family:var(--fm);font-size:12px;color:var(--green)">${s.post}%</td>
+      <td style="text-align:center"><span class="gain-pill">+${gain}pp</span></td>
+      <td><div class="mini-bar-wrap">
+        <div style="display:flex;gap:2px;font-family:var(--fm);font-size:9px;color:var(--ink3);margin-bottom:2px"><span style="color:var(--red)">${s.pre}%</span><span style="flex:1"></span><span style="color:var(--green)">${s.post}%</span></div>
+        <div style="position:relative;height:5px;background:var(--surface3);border-radius:3px;overflow:hidden">
+          <div style="position:absolute;left:0;top:0;height:100%;width:${s.pre}%;background:rgba(194,48,48,0.5);border-radius:3px"></div>
+          <div style="position:absolute;left:0;top:0;height:100%;width:${s.post}%;background:${c};opacity:0.75;border-radius:3px"></div>
+        </div>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════ INIT ═══════════════
+window.onload=()=>{
+  buildHeatmap();buildPipeline();buildModGrid();buildOverview();renderTest();buildStudentTable();
+  setTimeout(buildOverviewChart,200);
+  window.switchTest=function(t){
+    curTest=t;
+    ['pre','post','results'].forEach(k=>{
+      const el=document.getElementById('ttab-'+k);
+      if(el)el.className='stab'+(t===k?' st-b':'');
+    });
+    renderTest();
+    if(t==='results')setTimeout(initResultCharts,100);
+  };
+  setTimeout(()=>buildPilotCharts(),300);
+};
+</script>
+</body>
+</html>
+EOF
